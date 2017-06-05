@@ -16,6 +16,9 @@ public class ContextCreator implements ContextBuilder<Agent>{
 	public Context<Agent> build(Context<Agent> context) {
 		context.setId("Neighbours");
 		
+		MainContext.instance().setContext(context);
+		
+		
 		int width = 10;
 		int height = 10;
 		
@@ -23,12 +26,15 @@ public class ContextCreator implements ContextBuilder<Agent>{
 		Grid<Agent> grid = gridFactory.createGrid("grid", context,
 				new GridBuilderParameters<Agent>(new WrapAroundBorders(),
 				new SimpleGridAdder<Agent>(), true, width, height));	//true -> plusieurs agents sur une case
+		
+		MainContext.instance().setGrid(grid);
 		for (int x = 0; x < 3; x++)
 		{
 			for (int y = 0; y < 3; y++) {
 				Agent a = new House();
 				context.add(a);
 				grid.moveTo(a, x, y);
+				
 			}
 		}
 		return context; 	
