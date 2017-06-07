@@ -47,8 +47,8 @@ public class FileParser {
 				}
 				else if (param[0].trim().equals("trade"))
 				{
-					BuildingZone<Trade> zone = new BuildingZone<>(orig_x, orig_y, nb_building, Trade.class);
-					MainContext.instance().add_trade_zone(zone);
+					BuildingZone<Shop> zone = new BuildingZone<>(orig_x, orig_y, nb_building, Shop.class);
+					MainContext.instance().add_shop_zone(zone);
 				}
 				else if (param[0].trim().equals("house"))
 				{

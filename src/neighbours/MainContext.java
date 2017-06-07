@@ -16,7 +16,7 @@ public class MainContext {
 	private int height;
 	private ArrayList<BuildingZone<House>> house_zones = null;
 	private ArrayList<BuildingZone<Office>> office_zones = null;
-	private ArrayList<BuildingZone<Trade>> trade_zones = null;
+	private ArrayList<BuildingZone<Shop>> shop_zones = null;
 	private boolean debug = true;
 	
 	private MainContext()
@@ -64,13 +64,13 @@ public class MainContext {
 		house_zones.add(h_zone);
 	}
 	
-	public void add_trade_zone(BuildingZone<Trade> t_zone)
+	public void add_shop_zone(BuildingZone<Shop> t_zone)
 	{
 		if (debug)
 			System.out.println("Added zone trade: " + t_zone.toString());
-		if (trade_zones == null )
-			trade_zones = new ArrayList<BuildingZone<Trade>>();
-		trade_zones.add(t_zone);
+		if (shop_zones == null )
+			shop_zones = new ArrayList<BuildingZone<Shop>>();
+		shop_zones.add(t_zone);
 	}
 	
 	public static MainContext instance()
