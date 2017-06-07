@@ -44,6 +44,15 @@ public class MainContext {
 				e.printStackTrace();
 			}
 		}
+		for (BuildingZone<Shop> shop : shop_zones)
+		{
+			try {
+				shop.generates_buildings();
+			} catch (InstantiationException | IllegalAccessException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
 	}
 	
 	public void add_office_zone(BuildingZone<Office> of_zone)
@@ -64,13 +73,13 @@ public class MainContext {
 		house_zones.add(h_zone);
 	}
 	
-	public void add_shop_zone(BuildingZone<Shop> t_zone)
+	public void add_shop_zone(BuildingZone<Shop> s_zone)
 	{
 		if (debug)
-			System.out.println("Added zone trade: " + t_zone.toString());
+			System.out.println("Added zone shop: " + s_zone.toString());
 		if (shop_zones == null )
 			shop_zones = new ArrayList<BuildingZone<Shop>>();
-		shop_zones.add(t_zone);
+		shop_zones.add(s_zone);
 	}
 	
 	public static MainContext instance()

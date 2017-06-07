@@ -26,6 +26,7 @@ public class BuildingZone<T extends Building> {
 		
 
 		int side_len = (int) Math.floor(Math.sqrt(nb_buildings));
+		System.out.println("Side building for " + buildingClass.toString() + ", " + ((Integer)side_len).toString());
 		for (int x = 0; x < side_len; ++x)
 		{
 			for (int y = 0; y < side_len; ++y)

@@ -45,7 +45,7 @@ public class FileParser {
 					BuildingZone<Office> zone = new BuildingZone<>(orig_x, orig_y, nb_building, Office.class);
 					MainContext.instance().add_office_zone(zone);
 				}
-				else if (param[0].trim().equals("trade"))
+				else if (param[0].trim().equals("shop"))
 				{
 					BuildingZone<Shop> zone = new BuildingZone<>(orig_x, orig_y, nb_building, Shop.class);
 					MainContext.instance().add_shop_zone(zone);
@@ -55,6 +55,8 @@ public class FileParser {
 					BuildingZone<House> zone = new BuildingZone<>(orig_x, orig_y, nb_building, House.class);
 					MainContext.instance().add_house_zone(zone);
 				}
+				else
+					throw new IllegalArgumentException("Error in file syntax: " + line);
 			}
 			else
 				throw new IllegalArgumentException("Error in file syntax: " + line);

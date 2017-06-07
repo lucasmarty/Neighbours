@@ -6,12 +6,24 @@
       <string>neighbours.House</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
+    <entry>
+    	<string>neighbours.Office</string>
+    	<string>repast.simphony.visualization.editedStyle.EditedStyle2D</string></entry>
+    <entry>
+    	<string>neighbours.Shop</string>
+    	<string>repast.simphony.visualization.editedStyle.EditedStyle2D</string></entry>
   </styles>
   <editedStyles>
     <entry>
       <string>neighbours.House</string>
       <string>neighbours.House.style_0.xml</string>
     </entry>
+    <entry>
+    	<string>neighbours.Office</string>
+    	<string>neighbours.Office.style_1.xml</string></entry>
+    <entry>
+    	<string>neighbours.Shop</string>
+    	<string>neighbours.Shop.style_0.xml</string></entry>
   </editedStyles>
   <netStyles/>
   <editedNetStyles/>
@@ -33,6 +45,12 @@
       <string>neighbours.House</string>
       <int>0</int>
     </entry>
+    <entry>
+    	<string>neighbours.Office</string>
+    	<int>1</int></entry>
+    <entry>
+    	<string>neighbours.Shop</string>
+    	<int>2</int></entry>
   </layerOrder>
   <projections>
     <repast.simphony.scenario.data.ProjectionData>
