@@ -1,5 +1,7 @@
 package neighbours;
 
+import java.io.IOException;
+
 import neighbours.Agent;
 import repast.simphony.context.Context;
 import repast.simphony.context.space.grid.GridFactory;
@@ -18,9 +20,15 @@ public class ContextCreator implements ContextBuilder<Agent>{
 		
 		MainContext.instance().setContext(context);
 		
+		try {
+			FileParser.readFile("test.in");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
-		int width = 10;
-		int height = 10;
+		int width = MainContext.instance().getWidth();
+		int height = MainContext.instance().getHeight();
 		
 		GridFactory gridFactory = GridFactoryFinder.createGridFactory(null);
 		Grid<Agent> grid = gridFactory.createGrid("grid", context,
@@ -28,15 +36,7 @@ public class ContextCreator implements ContextBuilder<Agent>{
 				new SimpleGridAdder<Agent>(), true, width, height));	//true -> plusieurs agents sur une case
 		
 		MainContext.instance().setGrid(grid);
-		for (int x = 0; x < 3; x++)
-		{
-			for (int y = 0; y < 3; y++) {
-				Agent a = new House();
-				context.add(a);
-				grid.moveTo(a, x, y);
-				
-			}
-		}
+		MainContext.instance().generate_building_zones();
 		return context; 	
 	}
 
