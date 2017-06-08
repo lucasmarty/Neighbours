@@ -444,3 +444,7 @@ java.lang.NumberFormatException: For input string: ""
 	at java.awt.EventDispatchThread.pumpEvents(EventDispatchThread.java:93)
 	at java.awt.EventDispatchThread.run(EventDispatchThread.java:82)
 WARN  [AWT-EventQueue-0] 2017-06-08 16:50:08,818 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
+WARN  [AWT-EventQueue-0] 2017-06-08 17:02:49,962 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
+WARN  [AWT-EventQueue-0] 2017-06-08 17:44:22,667 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
+WARN  [AWT-EventQueue-0] 2017-06-08 17:49:20,282 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
+WARN  [AWT-EventQueue-0] 2017-06-08 17:51:08,116 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin

@@ -1,6 +1,7 @@
 package neighbours;
 
 import repast.simphony.context.Context;
+import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 import repast.simphony.space.grid.Grid;
@@ -37,7 +38,7 @@ public class Human extends Agent{
 		birthday();
 	}
 
-	@Override
+	@ScheduledMethod(start = 1, interval = 1, priority = 1)
 	public void implement() {
 		Context<Object> context = ContextUtils.getContext(this);
 		death(context);

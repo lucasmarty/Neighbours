@@ -14,11 +14,4 @@ public class House extends Building {
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void implement() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

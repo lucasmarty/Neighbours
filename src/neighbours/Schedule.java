@@ -30,11 +30,6 @@ public class Schedule extends Agent{
 		computeSchedule(ticks);
 	}
 	
-	@Override
-	public void implement() {
-		
-	}
-	
 	public void computeSchedule(double ticks) {
 		this.currHour = (ticks%aHour < 24) ? (int)ticks % aHour : 0;
 		this.currDay = (ticks%aDay < 7) ? (int)ticks % aDay : 1;
