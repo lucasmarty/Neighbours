@@ -12,14 +12,6 @@ public class Shop extends Building {
 	
 	private boolean opened;
 	
-	
-	public Shop(Grid<Agent> grid, int cpacity, int opening, int closure) {
-		super(grid, cpacity);
-		this.opening = opening;
-		this.closure = closure;
-		this.opened = false;
-	}
-
 	@Override
 	public void compute() {
 		

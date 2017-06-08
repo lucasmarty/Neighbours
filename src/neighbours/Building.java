@@ -4,10 +4,14 @@ import repast.simphony.space.grid.Grid;
 
 public abstract class Building extends Agent{
 	private int capacity;
-	
-	public Building(Grid<Agent> grid, int cpacity) {
-		super(grid);
+
+	public int getCapacity() {
+		return capacity;
+	}
+
+	public void setCapacity(int capacity) {
 		this.capacity = capacity;
 	}
+	
 	
 }

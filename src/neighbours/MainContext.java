@@ -25,6 +25,8 @@ public class MainContext {
 	
 	public void generate_building_zones()
 	{
+		if (house_zones != null)
+		{
 		for (BuildingZone<House> houses : house_zones)
 		{
 			try {
@@ -34,7 +36,9 @@ public class MainContext {
 				e.printStackTrace();
 			}
 		}
-		
+		}
+		if (office_zones != null)
+		{
 		for (BuildingZone<Office> office : office_zones)
 		{
 			try {
@@ -44,6 +48,9 @@ public class MainContext {
 				e.printStackTrace();
 			}
 		}
+		}
+		if (shop_zones != null)
+		{
 		for (BuildingZone<Shop> shop : shop_zones)
 		{
 			try {
@@ -52,6 +59,7 @@ public class MainContext {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		}
 		}
 	}
 	

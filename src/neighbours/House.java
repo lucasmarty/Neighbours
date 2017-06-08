@@ -5,11 +5,6 @@ import repast.simphony.space.grid.Grid;
 public class House extends Building {
 
 	private int food;
-	
-	public House(Grid<Agent> grid, int cpacity, int food) {
-		super(grid, cpacity);
-		this.food = food;
-	}
 
 	@Override
 	public void compute() {

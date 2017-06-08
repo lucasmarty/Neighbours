@@ -21,9 +21,8 @@ public class Human extends Agent{
 	
 	private Schedule schedule;
 	
-	public Human(Grid<Agent> grid, int age, int[] birth, int money, int health, House home, Office office)
+	public Human(int age, int[] birth, int money, int health, House home, Office office)
 	{
-		super(grid);
 		this.setAge(age);
 		this.birth = birth;
 		this.setMoney(money);
@@ -42,7 +41,7 @@ public class Human extends Agent{
 	public void implement() {
 		Context<Object> context = ContextUtils.getContext(this);
 		death(context);
-		GridPoint pos = grid.getLocation(this);
+		GridPoint pos = MainContext.instance().getGrid().getLocation(this);
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",

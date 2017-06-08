@@ -12,13 +12,6 @@ public class Office extends Building {
 	private boolean opened;
 	
 	private int salary;
-	
-	public Office(Grid<Agent> grid, int capacity, int opening, int closure) {
-		super(grid, capacity);
-		this.setOpening(opening);
-		this.setClosure(closure);
-		this.setOpened(false);
-	}
 
 	@Override
 	public void compute() {

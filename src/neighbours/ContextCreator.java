@@ -21,7 +21,7 @@ public class ContextCreator implements ContextBuilder<Agent>{
 		MainContext.instance().setContext(context);
 		
 		try {
-			FileParser.readFile("test");
+			FileParser.readFile("test.in");
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -35,10 +35,11 @@ public class ContextCreator implements ContextBuilder<Agent>{
 				new GridBuilderParameters<Agent>(new WrapAroundBorders(),
 				new SimpleGridAdder<Agent>(), true, width, height));	//true -> plusieurs agents sur une case
 		
-		Schedule schedule = new Schedule(grid, 2000, 0, 0, 0);
+		Schedule schedule = new Schedule(2000, 0, 0, 0);
 		context.add(schedule);
 		
 		MainContext.instance().setGrid(grid);
+		MainContext.instance().generate_building_zones();
 		return context; 	
 	}
 

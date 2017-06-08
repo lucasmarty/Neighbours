@@ -16,8 +16,7 @@ public class Schedule extends Agent{
 	private int currDay;   // 1->Monday to 7->Sunday / Start to 1
 	private int currHour; // 0 to 24 Start to 0
 	
-	public Schedule(Grid<Agent> grid, int year, int month, int day, int hour) {
-		super(grid);
+	public Schedule(int year, int month, int day, int hour) {
 		this.currYear = year;
 		this.currMonth = month;
 		this.currDay = day;
