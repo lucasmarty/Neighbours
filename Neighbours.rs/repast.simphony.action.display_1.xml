@@ -15,6 +15,10 @@
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
+      <string>neighbours.Human</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
       <string>neighbours.House</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
@@ -33,6 +37,10 @@
       <string>neighbours.Road.style_4.xml</string>
     </entry>
     <entry>
+      <string>neighbours.Human</string>
+      <string>neighbours.Human.style_7.xml</string>
+    </entry>
+    <entry>
       <string>neighbours.House</string>
       <string>neighbours.House.style_0.xml</string>
     </entry>
@@ -47,7 +55,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1147778007</hashCode>
+    <hashCode>1218495167</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -64,6 +72,10 @@
     <entry>
       <string>neighbours.Road</string>
       <int>0</int>
+    </entry>
+    <entry>
+      <string>neighbours.Human</string>
+      <int>4</int>
     </entry>
     <entry>
       <string>neighbours.House</string>

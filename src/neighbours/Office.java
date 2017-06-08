@@ -2,7 +2,6 @@ package neighbours;
 
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
-import repast.simphony.space.grid.Grid;
 
 public class Office extends Building {
 
@@ -25,12 +24,13 @@ public class Office extends Building {
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
-			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening() "
-					 + "&& $watchee.getCurrDay() != 6" 
-					 + "&& $watchee.getCurrDay() != 7",
+			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening()"
+					 + " && $watchee.getCurrDay() != 6" 
+					 + " && $watchee.getCurrDay() != 7",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	private void opened() {
-		this.setOpened(true);
+	private void open() {
+		if (!opened)
+			this.setOpened(true);
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",

@@ -1,12 +1,7 @@
 package neighbours;
 
-import repast.simphony.context.Context;
-import repast.simphony.engine.schedule.ScheduledMethod;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
-import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
-import repast.simphony.util.ContextUtils;
 
 public class Human extends Agent{
 	
@@ -19,13 +14,14 @@ public class Human extends Agent{
 	private House home;
 	private Office office;
 	
-	private Schedule schedule;
-	
+	public Human() {
+		
+	}
 	
 	public Human(int age, int[] birth, int money, int health, House home, Office office)
 	{
 		this.setAge(age);
-		this.birth = birth;
+		this.setBirth(birth);
 		this.setMoney(money);
 		this.health = health;
 		this.setHome(home);
@@ -38,10 +34,6 @@ public class Human extends Agent{
 		birthday();
 	}
 
-	@ScheduledMethod(start = 1, interval = 1, priority = 1)
-	public void implement() {
-		GridPoint pos = MainContext.instance().getGrid().getLocation(this);
-	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currMonth, currDay, currHour",
@@ -50,16 +42,33 @@ public class Human extends Agent{
 							 + "&& $watchee.getCurrMonth() == 1",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() {
-		setMoney(getMoney() + office.getSalary());
+		//setMoney(getMoney() + office.getSalary());
 	}
 
+	@Watch(watcheeClassName = "neighbours.Office",
+			watcheeFieldNames = "opened",
+			triggerCondition = "$watchee.isOpened",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void goToWork() {
+		// TODO
+	}
+	
+	public void goShopping() {
+		// TODO
+	}
+	
 	private void death() {
 		MainContext.instance().getContext().remove(this);
 	}
 	
+	@Watch(watcheeClassName = "neighbours.Schedule",
+			watcheeFieldNames = "currMonth, currDay, currHour",
+			triggerCondition = "$watchee.getCurrDay() == $watcher.getBirth()[0] "
+							 + "&& $watchee.getCurrHour() == 1 "
+							 + "&& $watchee.getCurrMonth() ==$watche.getBirth[]",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	private void birthday() {
-		if (schedule.getCurrDay() == birth[0] && schedule.getCurrMonth() == birth[1] && schedule.getCurrYear() == birth[2])
-			setAge(getAge() + 1);
+		setAge(getAge() + 1);
 	}
 
 	public int getAge() {
@@ -97,5 +106,12 @@ public class Human extends Agent{
 	public void setHome(House home) {
 		this.home = home;
 	}
-	
+
+	public int[] getBirth() {
+		return birth;
+	}
+
+	public void setBirth(int[] birth) {
+		this.birth = birth;
+	}
 }

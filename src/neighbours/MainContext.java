@@ -17,6 +17,7 @@ public class MainContext {
 	private Grid<Agent> grid;
 	private int width;
 	private int height;
+	private ArrayList<Human> humans = null;
 	private ArrayList<BuildingZone<House>> house_zones = null;
 	private ArrayList<BuildingZone<Office>> office_zones = null;
 	private ArrayList<BuildingZone<Shop>> shop_zones = null;
