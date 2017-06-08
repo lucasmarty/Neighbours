@@ -3,7 +3,7 @@ package neighbours;
 import repast.simphony.space.grid.Grid;
 
 public abstract class Building extends Agent{
-	private int capacity;
+	protected int capacity;
 
 	public int getCapacity() {
 		return capacity;
