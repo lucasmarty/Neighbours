@@ -36,8 +36,8 @@ public class ContextCreator implements ContextBuilder<Agent>{
 				new SimpleGridAdder<Agent>(), true, width, height));	//true -> plusieurs agents sur une case
 		
 		Schedule schedule = new Schedule(2000, 0, 0, 0);
-		context.add(schedule);
-		
+		MainContext.instance().getContext().add(schedule);
+
 		MainContext.instance().setGrid(grid);
 		MainContext.instance().generate_building_zones();
 		return context; 	
