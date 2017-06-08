@@ -6,7 +6,7 @@ import repast.simphony.space.grid.Grid;
 
 public class Schedule extends Agent{
 	
-	public static final int aHour = 60;
+	public static final int aHour = 10; // change this value to accelerate or not the scheduling
 	public static final int aDay = aHour * 24;
 	public static final int aMonth = aDay * 30;
 	public static final int aYear = aMonth * 12;
@@ -27,14 +27,16 @@ public class Schedule extends Agent{
 	public void compute() {
 		double ticks = RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 		computeSchedule(ticks);
+		//System.out.println(ticks / aMonth);
+		System.out.println("ticks: " + ticks + "// Hour:" + currHour + "// Day: " + currDay + "// Mont: " + currMonth + "// Year: " + currYear);
 	}
 	
 	public void computeSchedule(double ticks) {
-		this.currHour = (ticks%aHour < 24) ? (int)ticks % aHour : 0;
-		this.currDay = (ticks%aDay < 7) ? (int)ticks % aDay : 1;
-		this.currMonth = (ticks%aMonth < 12) ? (int)ticks % aMonth : 1;
-		if (currYear%aYear == 0)
-			this.currYear += 1;
+		this.currHour =(ticks%aHour == 0) ? currHour+1 : (currHour > 24) ? 1 : currHour;
+		this.currDay = (ticks%aDay == 0) ?  currDay+1 : (currDay > 7) ? 1 : currDay;
+		this.currMonth = (ticks%aMonth == 0) ? currMonth+1 : (currMonth > 12 ) ? 1 : currMonth;
+		if (ticks%aYear == 0)
+			this.currYear++;
 	}
 	
 	public int getCurrDay() {
