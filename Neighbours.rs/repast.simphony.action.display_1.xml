@@ -1,29 +1,41 @@
 <repast.simphony.visualization.engine.CartesianDisplayDescriptor>
-  <name>New Display</name>
+  <name>Main Grid</name>
   <type>2D</type>
   <styles>
+    <entry>
+      <string>neighbours.Shop</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
+      <string>neighbours.Office</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
+      <string>neighbours.Road</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
     <entry>
       <string>neighbours.House</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
-    <entry>
-    	<string>neighbours.Office</string>
-    	<string>repast.simphony.visualization.editedStyle.EditedStyle2D</string></entry>
-    <entry>
-    	<string>neighbours.Shop</string>
-    	<string>repast.simphony.visualization.editedStyle.EditedStyle2D</string></entry>
   </styles>
   <editedStyles>
+    <entry>
+      <string>neighbours.Shop</string>
+      <string>neighbours.Shop.style_0.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.Office</string>
+      <string>neighbours.Office.style_1.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.Road</string>
+      <string>neighbours.Road.style_4.xml</string>
+    </entry>
     <entry>
       <string>neighbours.House</string>
       <string>neighbours.House.style_0.xml</string>
     </entry>
-    <entry>
-    	<string>neighbours.Office</string>
-    	<string>neighbours.Office.style_1.xml</string></entry>
-    <entry>
-    	<string>neighbours.Shop</string>
-    	<string>neighbours.Shop.style_0.xml</string></entry>
   </editedStyles>
   <netStyles/>
   <editedNetStyles/>
@@ -35,22 +47,28 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>148699040</hashCode>
+    <hashCode>1147778007</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
-      <string>neighbours.House</string>
+      <string>neighbours.Shop</string>
+      <int>3</int>
+    </entry>
+    <entry>
+      <string>neighbours.Office</string>
+      <int>2</int>
+    </entry>
+    <entry>
+      <string>neighbours.Road</string>
       <int>0</int>
     </entry>
     <entry>
-    	<string>neighbours.Office</string>
-    	<int>1</int></entry>
-    <entry>
-    	<string>neighbours.Shop</string>
-    	<int>2</int></entry>
+      <string>neighbours.House</string>
+      <int>1</int>
+    </entry>
   </layerOrder>
   <projections>
     <repast.simphony.scenario.data.ProjectionData>

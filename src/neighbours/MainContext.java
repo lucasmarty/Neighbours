@@ -1,8 +1,11 @@
 package neighbours;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
+import Utils.Dijkstraa;
 import repast.simphony.space.grid.Grid;
+import repast.simphony.space.grid.GridPoint;
 import repast.simphony.context.Context;
 
 // Singleton class which holds context, grid, and zoneBuilding
@@ -60,6 +63,28 @@ public class MainContext {
 				e.printStackTrace();
 			}
 		}
+		}
+		
+		// Now generates roads
+		ArrayList<Class<? extends Agent>> agentUsed = new ArrayList<>();
+		agentUsed.add(Road.class);
+		
+		int[][] gridWeightRoad = Dijkstraa.buildGridWeight(agentUsed, 1, false);
+		Dijkstraa djk = new Dijkstraa(gridWeightRoad);
+		
+		//From first house zone to shop zone:
+		HashSet<GridPoint> destSet = new HashSet<>();
+		destSet.addAll(shop_zones.get(0).getRoadsLocation());
+		GridPoint start = house_zones.get(0).getRoadsLocation().get(0);
+
+		ArrayList<GridPoint> path = djk.shortestPathTo(destSet, start);
+		
+		for (GridPoint pt : path)
+		{
+			Agent r = new Road();
+			context.add(r);
+			grid.moveTo(r, pt.getX(), pt.getY());
+
 		}
 	}
 	
