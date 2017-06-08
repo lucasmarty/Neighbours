@@ -1,5 +1,4 @@
 grid: 25, 25
 zone: office, 4, 4, 25
 zone: house, 5, 10, 16
-zone: trade, 19, 11, 36
 

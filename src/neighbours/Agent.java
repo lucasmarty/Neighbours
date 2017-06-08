@@ -5,12 +5,10 @@ import repast.simphony.space.grid.Grid;
 
 public abstract class Agent {
 	protected Grid<Agent> grid;
-	protected boolean alive;
 
 	public Agent(Grid<Agent> grid2)
 	{
 		this.grid = grid2;
-		alive = true;
 	}
 
 	@ScheduledMethod(start = 1, interval = 1, priority = 2)

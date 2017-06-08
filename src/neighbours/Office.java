@@ -4,9 +4,18 @@ import repast.simphony.space.grid.Grid;
 
 public class Office extends Building {
 
-	public Office(Grid<Agent> grid, int cpacity) {
-		super(grid, cpacity);
-		// TODO Auto-generated constructor stub
+	private int opening; //  hours[0,24]
+	private int closure; //  hours[0,24]
+	
+	private boolean opened;
+	
+	private int salary;
+	
+	public Office(Grid<Agent> grid, int capacity, int opening, int closure) {
+		super(grid, capacity);
+		this.opening = opening;
+		this.closure = closure;
+		this.opened = false;
 	}
 
 	@Override
@@ -19,6 +28,10 @@ public class Office extends Building {
 	public void implement() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	public int getSalary() {
+		return salary;
 	}
 
 }
