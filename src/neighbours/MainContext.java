@@ -65,26 +65,43 @@ public class MainContext {
 		}
 		}
 		
+		generateRoad();
+	}
+	
+	private void generateRoad()
+	{
 		// Now generates roads
 		ArrayList<Class<? extends Agent>> agentUsed = new ArrayList<>();
 		agentUsed.add(Road.class);
-		
+				
 		int[][] gridWeightRoad = Dijkstraa.buildGridWeight(agentUsed, 1, false);
 		Dijkstraa djk = new Dijkstraa(gridWeightRoad);
 		
-		//From first house zone to shop zone:
-		HashSet<GridPoint> destSet = new HashSet<>();
-		destSet.addAll(shop_zones.get(0).getRoadsLocation());
-		GridPoint start = house_zones.get(0).getRoadsLocation().get(0);
-
-		ArrayList<GridPoint> path = djk.shortestPathTo(destSet, start);
+		ArrayList<BuildingZone<? extends Building>> zones = new ArrayList<>();
+		zones.addAll(office_zones);
+		zones.addAll(shop_zones);
+		zones.addAll(house_zones);
 		
-		for (GridPoint pt : path)
+		for (int idx = 0; idx < zones.size(); ++idx)
 		{
-			Agent r = new Road();
-			context.add(r);
-			grid.moveTo(r, pt.getX(), pt.getY());
+			GridPoint start = zones.get(idx).getRoadsLocation().get(0);
+		
+			for (int cur = idx + 1; cur < zones.size(); ++cur)
+			{
+				//From first house zone to shop zone:
+				HashSet<GridPoint> destSet = new HashSet<>();
+				destSet.addAll(zones.get(cur).getRoadsLocation());
 
+				ArrayList<GridPoint> path = djk.shortestPathTo(destSet, start);
+				
+				for (GridPoint pt : path)
+				{
+					Agent r = new Road();
+					context.add(r);
+					grid.moveTo(r, pt.getX(), pt.getY());
+					
+				}
+			}
 		}
 	}
 	

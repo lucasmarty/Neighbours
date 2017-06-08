@@ -93,8 +93,5 @@ public class BuildingZone<T extends Building> {
 				MainContext.instance().getContext().add(r);
 				MainContext.instance().getGrid().moveTo(r, x_coord, y_coord);
 			}
-		
-		System.out.println("Built " + nbRoad.toString() + " roads");
-		
 	}
 }
