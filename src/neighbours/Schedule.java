@@ -1,8 +1,6 @@
 package neighbours;
 
 import repast.simphony.engine.environment.RunEnvironment;
-import repast.simphony.space.grid.Grid;
-
 
 public class Schedule extends Agent{
 	
@@ -14,7 +12,7 @@ public class Schedule extends Agent{
 	private int currYear;  // start at +2000 A.D
 	private int currMonth; // 1->January to 12->December / Start to 1
 	private int currDay;   // 1->Monday to 7->Sunday / Start to 1
-	private int currHour; // 0 to 24 Start to 0
+	private int currHour; // 1 to 24 Start to 1
 	
 	public Schedule(int year, int month, int day, int hour) {
 		this.currYear = year;
@@ -27,8 +25,7 @@ public class Schedule extends Agent{
 	public void compute() {
 		double ticks = RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 		computeSchedule(ticks);
-		//System.out.println(ticks / aMonth);
-		System.out.println("ticks: " + ticks + "// Hour:" + currHour + "// Day: " + currDay + "// Mont: " + currMonth + "// Year: " + currYear);
+		//System.out.println("// Hour:" + currHour + "// Day: " + currDay + "// Mont: " + currMonth + "// Year: " + currYear);
 	}
 	
 	public void computeSchedule(double ticks) {
@@ -54,5 +51,4 @@ public class Schedule extends Agent{
 	public int getCurrYear() {
 		return this.currYear;
 	}
-	
 }

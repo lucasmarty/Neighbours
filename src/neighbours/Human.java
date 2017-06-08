@@ -21,6 +21,7 @@ public class Human extends Agent{
 	
 	private Schedule schedule;
 	
+	
 	public Human(int age, int[] birth, int money, int health, House home, Office office)
 	{
 		this.setAge(age);
@@ -39,21 +40,21 @@ public class Human extends Agent{
 
 	@ScheduledMethod(start = 1, interval = 1, priority = 1)
 	public void implement() {
-		Context<Object> context = ContextUtils.getContext(this);
-		death(context);
 		GridPoint pos = MainContext.instance().getGrid().getLocation(this);
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currMonth",
+			watcheeFieldNames = "currMonth, currDay, currHour",
+			triggerCondition = "$watchee.getCurrDay() == 1 "
+							 + "&& $watchee.getCurrHour() == 1 "
+							 + "&& $watchee.getCurrMonth() == 1",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() {
 		setMoney(getMoney() + office.getSalary());
 	}
-	
-	private void death(Context<Object> context) {
-		if (health == 0)
-			context.remove(this);
+
+	private void death() {
+		MainContext.instance().getContext().remove(this);
 	}
 	
 	private void birthday() {
@@ -69,6 +70,10 @@ public class Human extends Agent{
 		this.age = age;
 	}
 
+	public int getHealth() {
+		return health;
+	}
+	
 	public int getMoney() {
 		return money;
 	}
