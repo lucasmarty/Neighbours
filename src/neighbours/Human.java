@@ -13,7 +13,7 @@ public class Human extends Agent{
 	private int age;
 	private int[] birth;
 	private int money;
-	private int food;
+	private boolean hungry;
 	private int health;
 	
 	private House home;
@@ -21,16 +21,16 @@ public class Human extends Agent{
 	
 	private Schedule schedule;
 	
-	public Human(Grid<Agent> grid, int age, int[] birth, int money, int food, int health, House home, Office office)
+	public Human(Grid<Agent> grid, int age, int[] birth, int money, int health, House home, Office office)
 	{
 		super(grid);
-		this.age = age;
+		this.setAge(age);
 		this.birth = birth;
-		this.money = money;
-		this.food = food;
+		this.setMoney(money);
 		this.health = health;
-		this.home = home;
+		this.setHome(home);
 		this.office = office;
+		this.setHungry(false);
 	}
 
 	@Override
@@ -45,11 +45,11 @@ public class Human extends Agent{
 		GridPoint pos = grid.getLocation(this);
 	}
 	
-	@Watch(watcheeClassName = "neigbours.Schedule",
+	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currMonth",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() {
-		money += office.getSalary();
+		setMoney(getMoney() + office.getSalary());
 	}
 	
 	private void death(Context<Object> context) {
@@ -59,7 +59,39 @@ public class Human extends Agent{
 	
 	private void birthday() {
 		if (schedule.getCurrDay() == birth[0] && schedule.getCurrMonth() == birth[1] && schedule.getCurrYear() == birth[2])
-			age += 1;
+			setAge(getAge() + 1);
+	}
+
+	public int getAge() {
+		return age;
+	}
+
+	public void setAge(int age) {
+		this.age = age;
+	}
+
+	public int getMoney() {
+		return money;
+	}
+
+	public void setMoney(int money) {
+		this.money = money;
+	}
+
+	public boolean isHungry() {
+		return hungry;
+	}
+
+	public void setHungry(boolean hungry) {
+		this.hungry = hungry;
+	}
+
+	public House getHome() {
+		return home;
+	}
+
+	public void setHome(House home) {
+		this.home = home;
 	}
 	
 }

@@ -448,3 +448,4 @@ WARN  [AWT-EventQueue-0] 2017-06-08 17:02:49,962 repast.simphony.engine.watcher.
 WARN  [AWT-EventQueue-0] 2017-06-08 17:44:22,667 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
 WARN  [AWT-EventQueue-0] 2017-06-08 17:49:20,282 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
 WARN  [AWT-EventQueue-0] 2017-06-08 17:51:08,116 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
+WARN  [AWT-EventQueue-0] 2017-06-08 17:59:55,453 repast.simphony.engine.watcher.WatcheeInstrumentor - Unable to find class(es) to watch: [neigbours.Schedule] classpath: /Users/lucasmarty/Neighbours/Neighbours/bin
