@@ -3,9 +3,9 @@ package neighbours;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import Utils.Dijkstraa;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
+import utils.Dijkstraa;
 import repast.simphony.context.Context;
 
 // Singleton class which holds context, grid, and zoneBuilding
@@ -21,6 +21,7 @@ public class MainContext {
 	private ArrayList<BuildingZone<Office>> office_zones = null;
 	private ArrayList<BuildingZone<Shop>> shop_zones = null;
 	private boolean debug = true;
+	private Schedule schedule;
 	
 	private MainContext()
 	{
@@ -38,6 +39,7 @@ public class MainContext {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			
 		}
 		}
 		if (office_zones != null)
@@ -49,6 +51,11 @@ public class MainContext {
 			} catch (InstantiationException | IllegalAccessException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+			}
+			for (Office o : office.getBuildings())
+			{
+				o.setClosure(18);
+				o.setOpening(9);
 			}
 		}
 		}
@@ -66,6 +73,25 @@ public class MainContext {
 		}
 		
 		generateRoad();
+		int[] birth = {12, 10, 2001};
+		House h = null;
+		Office o = null;
+		for (Office of : office_zones.get(0).getBuildings())
+		{
+			o = of;
+			break;
+		}
+		for (House house : house_zones.get(0).getBuildings())
+		{
+			h = house;
+			break;
+		}
+		System.out.println(o.getId());
+		Human human = new Human(25, birth, 200, 200, h, o);
+		context.add(human);
+		System.out.println(human.getOffice().getId());
+		GridPoint hPos = grid.getLocation(h);
+		grid.moveTo(human, hPos.getX(), hPos.getY());
 	}
 	
 	private void generateRoad()
@@ -86,6 +112,7 @@ public class MainContext {
 		{
 			GridPoint start = zones.get(idx).getRoadsLocation().get(0);
 		
+			
 			for (int cur = idx + 1; cur < zones.size(); ++cur)
 			{
 				//From first house zone to shop zone:
@@ -169,5 +196,13 @@ public class MainContext {
 
 	public void setWidth(int width) {
 		this.width = width;
+	}
+
+	public Schedule getSchedule() {
+		return schedule;
+	}
+
+	public void setSchedule(Schedule schedule) {
+		this.schedule = schedule;
 	}	
 }

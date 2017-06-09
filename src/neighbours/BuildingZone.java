@@ -1,6 +1,7 @@
 package neighbours;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 
 import repast.simphony.context.Context;
 import repast.simphony.space.grid.Grid;
@@ -8,10 +9,11 @@ import repast.simphony.space.grid.GridPoint;
 
 public class BuildingZone<T extends Building> {
 	
-	private ArrayList<T> buildings;
+	private HashSet<T> buildings;
 	private int nb_buildings = 0;
 	private int origin_x = 0;
 	private int origin_y = 0;
+	private int side_len;
     private Class<T> buildingClass;
 	
 	
@@ -23,9 +25,30 @@ public class BuildingZone<T extends Building> {
 		buildingClass = b_class;
 	}
 	
+	public GridPoint getStartingPointFrom(GridPoint pos)
+	{
+		if (pos.getX() < origin_x || pos.getX() >= origin_x + side_len
+				|| pos.getY() < origin_y || pos.getY() >= origin_y + side_len)
+			throw new IllegalArgumentException("Error pos not in zone");
+		
+		int middle_x = side_len / 2;
+		int middle_y = side_len / 2;
+		
+		int x = pos.getX() < origin_x + middle_x ? origin_x - 1 : origin_x + side_len + 1;
+		int y = pos.getY() < origin_y + middle_y ? origin_y - 1 : origin_y + side_len + 1;
+
+		x = x < 0 ? 0 : x >= MainContext.instance().getWidth() ? MainContext.instance().getWidth() - 1 : x; 
+		y = y < 0 ? 0 : y >= MainContext.instance().getHeight() ? MainContext.instance().getHeight() - 1 : y;
+		return new GridPoint(x, y);
+	}
+	
+	public HashSet<T> getBuildings()
+	{
+		return buildings;
+	}
+	
 	public ArrayList<GridPoint> getRoadsLocation()
 	{
-		int side_len = (int) Math.floor(Math.sqrt(nb_buildings));
 	
 		ArrayList<GridPoint> res = new ArrayList<>();
 		
@@ -49,14 +72,17 @@ public class BuildingZone<T extends Building> {
 	public void generates_buildings() throws InstantiationException, IllegalAccessException{
 		
 
-		int side_len = (int) Math.floor(Math.sqrt(nb_buildings));
+		buildings = new HashSet<>();
+		side_len = (int) Math.floor(Math.sqrt(nb_buildings));
 		System.out.println("Side building for " + buildingClass.toString() + ", " + ((Integer)side_len).toString());
 		for (int x = 0; x < side_len; ++x)
 		{
 			for (int y = 0; y < side_len; ++y)
 			{
-			Agent b = buildingClass.newInstance();
+			Building b = buildingClass.newInstance();
+			b.setZone(this);
 			
+			buildings.add((T) b);
 			MainContext.instance().getContext().add(b);
 			MainContext.instance().getGrid().moveTo(b, x + origin_x, y + origin_y);
 			}

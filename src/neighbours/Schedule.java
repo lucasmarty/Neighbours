@@ -4,7 +4,7 @@ import repast.simphony.engine.environment.RunEnvironment;
 
 public class Schedule extends Agent{
 	
-	public static final int aHour = 10; // change this value to accelerate or not the scheduling
+	public static final int aHour = 10000; // change this value to accelerate or not the scheduling
 	public static final int aDay = aHour * 24;
 	public static final int aMonth = aDay * 30;
 	public static final int aYear = aMonth * 12;

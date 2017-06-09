@@ -1,17 +1,24 @@
 package neighbours;
 
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 import repast.simphony.space.grid.Grid;
+import repast.simphony.space.grid.GridPoint;
 
 public class Office extends Building {
 
 	private int opening; //  hours[0,24]
 	private int closure; //  hours[0,24]
 	
+	static private int idCounter = 0;
+	
 	private boolean opened;
 	
 	private int salary;
+
+	private int id = ++idCounter;
+	
 
 	@Override
 	public void compute() {
@@ -29,15 +36,18 @@ public class Office extends Building {
 					 + "&& $watchee.getCurrDay() != 6" 
 					 + "&& $watchee.getCurrDay() != 7",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	private void opened() {
+	public void opened() {
+		
 		this.setOpened(true);
 	}
+	
+
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
 			triggerCondition = "$watchee.getCurrHour() == $watcher.getClosure()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	private void close() {
+	public void close() {
 		this.setOpened(false);
 	}
 
@@ -63,6 +73,10 @@ public class Office extends Building {
 
 	public void setOpened(boolean opened) {
 		this.opened = opened;
+	}
+
+	public int getId() {
+		return id;
 	}
 
 }

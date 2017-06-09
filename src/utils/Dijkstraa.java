@@ -1,4 +1,4 @@
-package Utils;
+package utils;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -95,9 +95,7 @@ public class Dijkstraa {
 		while (!minHeap.isEmpty() && !destination.isEmpty())
 		{
 			GridPoint cur = minHeap.remove();
-			/*Agent r = new Road();
-			MainContext.instance().getContext().add(r);
-			MainContext.instance().getGrid().moveTo(r,  cur.getX(), cur.getY());*/
+
 			for (GridPoint dir : directions)
 			{
 				GridPoint neighbour = new GridPoint(dir.getX() + cur.getX(), dir.getY() + cur.getY());
