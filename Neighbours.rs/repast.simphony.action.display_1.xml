@@ -55,7 +55,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1349417023</hashCode>
+    <hashCode>-1486751126</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -121,9 +121,9 @@
   </projectionDescriptors>
   <props/>
   <backgroundColor>
-    <red>255</red>
-    <green>255</green>
-    <blue>255</blue>
+    <red>51</red>
+    <green>204</green>
+    <blue>0</blue>
     <alpha>255</alpha>
   </backgroundColor>
   <valueLayers/>

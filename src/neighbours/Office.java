@@ -1,10 +1,7 @@
 package neighbours;
 
-import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
-import repast.simphony.space.grid.Grid;
-import repast.simphony.space.grid.GridPoint;
 
 public class Office extends Building {
 
@@ -23,7 +20,6 @@ public class Office extends Building {
 	@Override
 	public void compute() {
 		// TODO Auto-generated method stub
-		
 	}
 
 	public int getSalary() {
@@ -37,7 +33,6 @@ public class Office extends Building {
 					 + " && $watchee.getCurrDay() != 7",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void open() {
-		
 		if (!opened)
 			this.setOpened(true);
 	}
