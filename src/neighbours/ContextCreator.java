@@ -39,8 +39,10 @@ public class ContextCreator implements ContextBuilder<Agent>{
 		MainContext.instance().getContext().add(schedule);
 		MainContext.instance().setSchedule(schedule);
 
+		
 		MainContext.instance().setGrid(grid);
 		MainContext.instance().generate_building_zones();
+		
 		return context; 	
 	}
 

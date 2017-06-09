@@ -25,7 +25,7 @@ public class Schedule extends Agent{
 	public void compute() {
 		double ticks = RunEnvironment.getInstance().getCurrentSchedule().getTickCount();
 		computeSchedule(ticks);
-		//System.out.println("// Hour:" + currHour + "// Day: " + currDay + "// Mont: " + currMonth + "// Year: " + currYear);
+		//System.out.println("// Hour:" + currHour + "// Day: " + currDay + "// Month: " + currMonth + "// Year: " + currYear);
 	}
 	
 	public void computeSchedule(double ticks) {

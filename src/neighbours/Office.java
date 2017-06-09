@@ -32,13 +32,13 @@ public class Office extends Building {
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
-			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening() "
-					 + "&& $watchee.getCurrDay() != 6" 
-					 + "&& $watchee.getCurrDay() != 7",
+			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening()"
+					 + " && $watchee.getCurrDay() != 6" 
+					 + " && $watchee.getCurrDay() != 7",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void opened() {
-		
-		this.setOpened(true);
+	private void open() {
+		if (!opened)
+			this.setOpened(true);
 	}
 	
 

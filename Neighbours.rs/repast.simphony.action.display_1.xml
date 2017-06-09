@@ -38,7 +38,7 @@
     </entry>
     <entry>
       <string>neighbours.Human</string>
-      <string>neighbours.Human.style_0.xml</string>
+      <string>neighbours.Human.style_7.xml</string>
     </entry>
     <entry>
       <string>neighbours.House</string>
@@ -55,7 +55,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1050796250</hashCode>
+    <hashCode>1218495167</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>

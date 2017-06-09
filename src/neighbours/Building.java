@@ -8,6 +8,7 @@ public abstract class Building extends Agent{
 	protected int capacity;
 	protected BuildingZone<? extends Building> zone;
 	
+
 	public int getCapacity() {
 		return capacity;
 	}
