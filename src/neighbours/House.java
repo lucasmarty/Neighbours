@@ -2,6 +2,9 @@ package neighbours;
 
 import java.util.ArrayList;
 
+import repast.simphony.engine.watcher.Watch;
+import repast.simphony.engine.watcher.WatcherTriggerSchedule;
+
 
 public class House extends Building {
 
@@ -12,6 +15,25 @@ public class House extends Building {
 	{
 		habitants = new ArrayList<Human>();
 	}
+
+	public void decreaseUsed()
+	{
+		if (used > 0)
+		 --used;
+	}
+	
+	public void increasedUsed()
+	{
+		if (used < capacity)
+			++used;
+	}
+	
+	public boolean isFull()
+	{
+		return used == capacity;
+	}
+
+	
 	
 	@Override
 	public void compute() {

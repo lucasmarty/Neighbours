@@ -9,7 +9,7 @@ import repast.simphony.space.grid.GridPoint;
 
 public class BuildingZone<T extends Building> {
 	
-	private HashSet<T> buildings;
+	private ArrayList<T> buildings;
 	private int nb_buildings = 0;
 	private int origin_x = 0;
 	private int origin_y = 0;
@@ -63,7 +63,7 @@ public class BuildingZone<T extends Building> {
 		return new GridPoint(x, y);
 	}
 	
-	public HashSet<T> getBuildings()
+	public ArrayList<T> getBuildings()
 	{
 		return buildings;
 	}
@@ -93,7 +93,7 @@ public class BuildingZone<T extends Building> {
 	public void generates_buildings() throws InstantiationException, IllegalAccessException{
 		
 
-		buildings = new HashSet<>();
+		buildings = new ArrayList<>();
 		side_len = (int) Math.floor(Math.sqrt(nb_buildings));
 		System.out.println("Side building for " + buildingClass.toString() + ", " + ((Integer)side_len).toString());
 		for (int x = 0; x < side_len; ++x)

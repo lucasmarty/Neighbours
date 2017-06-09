@@ -55,7 +55,7 @@ public class FileParser {
 				{
 					if (param.length != 6)
 						throw new IllegalArgumentException("Error in file syntax "+ line);
-					int nbHuman = Integer.parseInt(param[4].trim());
+					int nbHuman = Integer.parseInt(param[5].trim());
 					BuildingZone<House> zone = new BuildingZone<>(orig_x, orig_y, nb_building, House.class, capa);
 					MainContext.instance().add_house_zone(zone, nbHuman);
 				}

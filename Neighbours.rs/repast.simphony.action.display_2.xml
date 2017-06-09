@@ -10,6 +10,10 @@
       <string>neighbours.Human</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
+    <entry>
+      <string>neighbours.House</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
   </styles>
   <editedStyles>
     <entry>
@@ -19,6 +23,10 @@
     <entry>
       <string>neighbours.Human</string>
       <string>neighbours.Human.style_8.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.House</string>
+      <string>neighbours.House.style_2.xml</string>
     </entry>
   </editedStyles>
   <netStyles>
@@ -41,7 +49,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1486751126</hashCode>
+    <hashCode>1305471039</hashCode>
   </schedParams>
   <layoutClassName>repast.simphony.visualization.visualization2D.Random2DLayout</layoutClassName>
   <layoutProjection>building network</layoutProjection>
@@ -49,11 +57,15 @@
   <layerOrder>
     <entry>
       <string>neighbours.Office</string>
-      <int>0</int>
+      <int>1</int>
     </entry>
     <entry>
       <string>neighbours.Human</string>
-      <int>1</int>
+      <int>2</int>
+    </entry>
+    <entry>
+      <string>neighbours.House</string>
+      <int>0</int>
     </entry>
   </layerOrder>
   <projections>

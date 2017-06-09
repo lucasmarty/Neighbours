@@ -1,11 +1,16 @@
 package neighbours;
 
-import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 
 public abstract class Building extends Agent{
 	
 	protected int capacity;
+	protected int used = 0;
+	
+	public int getUsed() {
+		return used;
+	}
+
 	protected BuildingZone<? extends Building> zone;
 	
 

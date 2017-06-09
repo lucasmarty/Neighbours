@@ -81,25 +81,46 @@ public class MainContext {
 		}
 		
 		generateRoad();
+		spawnHumanPerZone();
+	}
+	
+	private void spawnHumanPerZone()
+	{
 		int[] birth = {12, 10, 2001};
-		House h = null;
-		Office o = null;
-		for (Office of : office_zones.get(1).getBuildings())
+
+		for (int idx = 0; idx < house_zones.size(); ++idx)
 		{
-			o = of;
-			break;
+		   int humansPool = nb_human_per_zones.get(idx);
+		   for (House house : house_zones.get(idx).getBuildings())
+		   {
+			   while (humansPool > 0 && !house.isFull())
+			   {
+				   Human human = new Human(25, birth, 200, 200);
+				   context.add(human);
+					
+				   GridPoint hPos = grid.getLocation(house);
+				   grid.moveTo(human, hPos.getX(), hPos.getY());
+				   human.setHome(house);
+				   chooseOfficeFor(human);
+				   --humansPool;
+			   }
+		   }
 		}
-		for (House house : house_zones.get(0).getBuildings())
+	}
+	
+	private void chooseOfficeFor(Human human)
+	{
+		for (int idx = 0; idx < office_zones.size(); ++idx)
 		{
-			h = house;
-			break;
+			for (Office of : office_zones.get(idx).getBuildings())
+			{
+				if (!of.isFull())
+				{
+					human.setOffice(of);
+					return;
+    			}
+			}
 		}
-		System.out.println(o.getId());
-		Human human = new Human(25, birth, 200, 200, h, o);
-		context.add(human);
-		System.out.println(human.getOffice().getId());
-		GridPoint hPos = grid.getLocation(h);
-		grid.moveTo(human, hPos.getX(), hPos.getY());
 	}
 	
 	private void generateRoad()
@@ -120,7 +141,6 @@ public class MainContext {
 		{
 			GridPoint start = zones.get(idx).getRoadsLocation().get(0);
 		
-			
 			for (int cur = idx + 1; cur < zones.size(); ++cur)
 			{
 				//From first house zone to shop zone:

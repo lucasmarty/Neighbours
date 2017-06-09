@@ -8,13 +8,9 @@ public class Office extends Building {
 	private int opening; //  hours[0,24]
 	private int closure; //  hours[0,24]
 	
-	static private int idCounter = 0;
-	
 	private boolean opened = false;
 	
 	private int salary = 0;
-
-	private int id = ++idCounter;
 	
 
 	@Override
@@ -24,6 +20,23 @@ public class Office extends Building {
 
 	public int getSalary() {
 		return salary;
+	}
+	
+	public void decreaseUsed()
+	{
+		if (used > 0)
+		 --used;
+	}
+	
+	public void increasedUsed()
+	{
+		if (used < capacity)
+			++used;
+	}
+	
+	public boolean isFull()
+	{
+		return used == capacity;
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
@@ -36,7 +49,6 @@ public class Office extends Building {
 		if (!opened)
 			this.setOpened(true);
 	}
-	
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
@@ -71,10 +83,6 @@ public class Office extends Building {
 
 	public void setOpened(boolean opened) {
 		this.opened = opened;
-	}
-
-	public int getId() {
-		return id;
 	}
 
 }
