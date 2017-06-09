@@ -14,15 +14,17 @@ public class BuildingZone<T extends Building> {
 	private int origin_x = 0;
 	private int origin_y = 0;
 	private int side_len;
+	private int capacityPerBuilding;
     private Class<T> buildingClass;
 	
 	
-	public BuildingZone(int or_x, int or_y, int nbBuilding, Class<T> b_class)
+	public BuildingZone(int or_x, int or_y, int nbBuilding, Class<T> b_class, int capacityPerBuilding)
 	{
 		origin_x = or_x;
 		origin_y = or_y;
 		nb_buildings = nbBuilding;
 		buildingClass = b_class;
+		this.capacityPerBuilding = capacityPerBuilding;
 	}
 	
 	public GridPoint getStartingPointFrom(GridPoint pos)
@@ -100,6 +102,7 @@ public class BuildingZone<T extends Building> {
 			{
 			Building b = buildingClass.newInstance();
 			b.setZone(this);
+			b.setCapacity(capacityPerBuilding);
 			
 			buildings.add((T) b);
 			MainContext.instance().getContext().add(b);

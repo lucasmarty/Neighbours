@@ -22,6 +22,10 @@
       <string>neighbours.House</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
+    <entry>
+      <string>neighbours.CarAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
   </styles>
   <editedStyles>
     <entry>
@@ -44,6 +48,10 @@
       <string>neighbours.House</string>
       <string>neighbours.House.style_0.xml</string>
     </entry>
+    <entry>
+      <string>neighbours.CarAgent</string>
+      <string>neighbours.CarAgent.style_0.xml</string>
+    </entry>
   </editedStyles>
   <netStyles/>
   <editedNetStyles/>
@@ -55,7 +63,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1349417023</hashCode>
+    <hashCode>-1105596512</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -80,6 +88,10 @@
     <entry>
       <string>neighbours.House</string>
       <int>1</int>
+    </entry>
+    <entry>
+      <string>neighbours.CarAgent</string>
+      <int>5</int>
     </entry>
   </layerOrder>
   <projections>

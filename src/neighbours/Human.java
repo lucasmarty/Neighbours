@@ -16,6 +16,7 @@ import utils.Car;
 import utils.Dijkstraa;
 import utils.Trajectory;
 import utils.TransportType;
+import utils.Walk;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 
@@ -29,6 +30,7 @@ public class Human extends Agent{
 	private int health;
 	private Queue<Trajectory> traj_queue;
 	private Trajectory currentTraj;
+	private CarAgent car;
 	
 	private House home;
 	private Office office;
@@ -54,6 +56,7 @@ public class Human extends Agent{
 		traj_queue = new LinkedList<>();
 		
 		MainContext.instance().getNetworkBuilding().addEdge(this, office);
+		MainContext.instance().getNetworkBuilding().addEdge(this, home);
 	}
 
 	@Override
@@ -69,20 +72,32 @@ public class Human extends Agent{
 		{
 			moving = true;
 			currentTraj = traj_queue.remove();
+			
+			if (currentTraj.getTransporType().equals(Car.class))
+			{	
+			  car = new CarAgent();
+			  MainContext.instance().getContext().add(car);
+			}
 		}
 		else if (moving)
 		{
 			if (currentTraj.isFinished())
 			{
-				MainContext.instance().getGrid().moveTo(this, currentTraj.getEnd().getX(),
-						currentTraj.getEnd().getY());
+				if (car != null)
+				{
+					MainContext.instance().getContext().remove(car);
+					car = null;
+				}
 				moving = false;
 				currentTraj = null;
 			}
 			else
 			{
 				GridPoint pt = currentTraj.step();
-				//if (currentTraj.getTransporType().isInstance(Car.class))
+				if (car != null)
+				{
+					MainContext.instance().getGrid().moveTo(car, pt.getX(), pt.getY());
+				}
 				MainContext.instance().getGrid().moveTo(this, pt.getX(), pt.getY());
 			}
 		}
@@ -106,21 +121,24 @@ public class Human extends Agent{
 	public void goToWork() {
 		if (office != null && home != null)
 		{
-		GridPoint from = home.getStartingPos();
-		GridPoint to = office.getStartingPos();
-		GridPoint end = MainContext.instance().getGrid().getLocation(office);
+			moveBuilding2Building(home, office);
+		}
+	}
+	
+	private void moveBuilding2Building(Building start, Building stop)
+	{
+		GridPoint from = start.getStartingPos();
+		GridPoint to = stop.getStartingPos();
+		GridPoint toW = MainContext.instance().getGrid().getLocation(stop);
+		GridPoint fromW = MainContext.instance().getGrid().getLocation(start);
 		
-		System.out.println("Starting point from: " + MainContext.instance().getGrid().getLocation(home)
-				+ " is " + from);
-		
-		System.out.println("Starting point from: " + end
-				+ " is " + to);
 		try {
-			planNextPath(from, to, end, Car.class);
+			planNextPath(fromW, from, Walk.class);
+			planNextPath(from, to, Car.class);
+			planNextPath(to, toW, Walk.class);
 		} catch (InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}
 		}
 	}
 	
@@ -142,19 +160,11 @@ public class Human extends Agent{
 		
 		if (office != null && home != null)
 		{
-		GridPoint from = office.getStartingPos();
-		GridPoint to = home.getStartingPos();
-		GridPoint end = MainContext.instance().getGrid().getLocation(home);
-		try {
-			planNextPath(from, to, end, Car.class);
-		} catch (InstantiationException | IllegalAccessException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+			moveBuilding2Building(office, home);
 		}
 	}
 	
-	private void planNextPath(GridPoint from, GridPoint dest, GridPoint end, Class<? extends TransportType> transport) 
+	private void planNextPath(GridPoint from, GridPoint dest, Class<? extends TransportType> transport) 
 			throws InstantiationException, IllegalAccessException
 	{
 		TransportType tr = transport.newInstance();
@@ -167,7 +177,7 @@ public class Human extends Agent{
 		
 		
 		ArrayList<GridPoint> path = djk.shortestPathTo(destPt, from);
-		Trajectory traj = new Trajectory(path, end, tr.getStep(), transport);
+		Trajectory traj = new Trajectory(path, tr.getStep(), transport);
 		
 		traj_queue.add(traj);
 	}

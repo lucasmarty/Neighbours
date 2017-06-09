@@ -22,6 +22,7 @@ public class MainContext {
 	private ArrayList<BuildingZone<House>> house_zones = null;
 	private ArrayList<BuildingZone<Office>> office_zones = null;
 	private ArrayList<BuildingZone<Shop>> shop_zones = null;
+	private ArrayList<Integer> nb_human_per_zones = null;
 	private boolean debug = true;
 	private Schedule schedule;
 	
@@ -83,7 +84,7 @@ public class MainContext {
 		int[] birth = {12, 10, 2001};
 		House h = null;
 		Office o = null;
-		for (Office of : office_zones.get(0).getBuildings())
+		for (Office of : office_zones.get(1).getBuildings())
 		{
 			o = of;
 			break;
@@ -148,13 +149,17 @@ public class MainContext {
 		office_zones.add(of_zone);
 	}
 	
-	public void add_house_zone(BuildingZone<House> h_zone)
+	public void add_house_zone(BuildingZone<House> h_zone, int nbHuman)
 	{
 		if (debug)
-			System.out.println("Added zone house: " + h_zone.toString());
+			System.out.println("Added zone house: " + h_zone.toString() + ", " + nbHuman);
 		if (house_zones == null )
-			house_zones = new ArrayList<BuildingZone<House>>();
+			house_zones = new ArrayList<>();
+		if (nb_human_per_zones == null)
+			nb_human_per_zones = new ArrayList<>();
+		
 		house_zones.add(h_zone);
+		nb_human_per_zones.add(nbHuman);
 	}
 	
 	public void add_shop_zone(BuildingZone<Shop> s_zone)

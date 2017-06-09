@@ -10,17 +10,14 @@ public class Trajectory {
 	private int curStep;
 	private int idx;
 	private ArrayList<GridPoint> path;
-	private GridPoint end;
 	private Class<? extends TransportType> transporType;
 	
-	public Trajectory(ArrayList<GridPoint> path, GridPoint end, int step,
+	public Trajectory(ArrayList<GridPoint> path, int step,
 			Class<? extends TransportType> transporType)
 	{
 		idx = 0;
 		curStep = 1;
 		this.path = path;
-		this.step = step;
-		this.end = end;
 		this.transporType = transporType;
 	}
 	
@@ -40,11 +37,6 @@ public class Trajectory {
 		}
 		++curStep;
 		return res;
-	}
-	
-	
-	public GridPoint getEnd() {
-		return end;
 	}
 
 	public int getStep() {
