@@ -2,49 +2,57 @@ package neighbours;
 
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
-import repast.simphony.random.RandomHelper;
 
-public class Office extends Building {
+public abstract class Service extends Building {
 
-	private int opening; //  hours[0,24]
-	private int closure; //  hours[0,24]
+	protected int opening; //  hours[0,24]
+	protected int closure; //  hours[0,24]
 	
-	private boolean opened = false;
+	protected boolean opened;
+	protected int cost;
 	
-	private int salary = RandomHelper.nextIntFromTo(50, 250);
+	protected int timePerService;
 	
+	
+	public abstract void provideService(Human human);
+	
+	public int getTimePerService() {
+		return timePerService;
+	}
 
+	public void setTimePerService(int timePerService) {
+		this.timePerService = timePerService;
+	}
+
+	public int getCost() {
+		return cost;
+	}
+
+	public void setCost(int cost) {
+		this.cost = cost;
+	}
+	
+	
 	@Override
 	public void compute() {
 		// TODO Auto-generated method stub
+
 	}
 
-	public int getSalary() {
-		return salary;
-	}
-	
-	
-	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
-			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening()"
-					 + " && $watchee.getCurrDay() != 6" 
-					 + " && $watchee.getCurrDay() != 7",
+			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void open() {
-		if (!opened)
-			this.setOpened(true);
+	private void opened() {
+		this.setOpened(true);
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
 			triggerCondition = "$watchee.getCurrHour() == $watcher.getClosure()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void close() 
-	{
-		if (opened)
-		   this.setOpened(false);	
-		
+	private void close() {
+		this.setOpened(false);
 	}
 
 	public int getOpening() {
@@ -70,5 +78,4 @@ public class Office extends Building {
 	public void setOpened(boolean opened) {
 		this.opened = opened;
 	}
-
 }

@@ -17,6 +17,7 @@ public class Trajectory {
 	{
 		idx = 0;
 		curStep = 1;
+		this.step = step;
 		this.path = path;
 		this.transporType = transporType;
 	}

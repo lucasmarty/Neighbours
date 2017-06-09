@@ -10,10 +10,28 @@ public abstract class Building extends Agent{
 	public int getUsed() {
 		return used;
 	}
+	
 
 	protected BuildingZone<? extends Building> zone;
 	
 
+	public void decreaseUsed()
+	{
+		if (used > 0)
+		 --used;
+	}
+	
+	public void increasedUsed()
+	{
+		if (used < capacity)
+			++used;
+	}
+	
+	public boolean isFull()
+	{
+		return used == capacity;
+	}
+	
 	public int getCapacity() {
 		return capacity;
 	}

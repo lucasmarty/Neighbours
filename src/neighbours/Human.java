@@ -5,34 +5,35 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
-import repast.simphony.context.Context;
-import repast.simphony.engine.schedule.ScheduledMethod;
+
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 import repast.simphony.space.graph.RepastEdge;
-import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
-import repast.simphony.util.ContextUtils;
 import utils.Car;
 import utils.Dijkstraa;
 import utils.Trajectory;
 import utils.TransportType;
 import utils.Walk;
-import repast.simphony.engine.watcher.Watch;
-import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 
 public class Human extends Agent{
 	
 	private int age;
 	private int[] birth;
 	private int money;
+	private boolean paid = false;
 	private boolean hungry;
 	private boolean moving;
-	private boolean isCurrWorking;
+	private boolean isCurrWorking = false;
 	private int health;
+	private int boredom = 0;
+	private int lastBored = 1;
 	private Queue<Trajectory> traj_queue;
 	private Trajectory currentTraj;
 	private CarAgent car;
+	
+
+	private ArrayList<IconAgent> animatedIcons = new ArrayList<>();
 	
 	private House home;
 	private RepastEdge<Agent> edge_home;
@@ -53,12 +54,15 @@ public class Human extends Agent{
 		  edge_office = MainContext.instance().getNetworkBuilding().addEdge(this, office);
 		
 		  this.office.increasedUsed();
-		  System.out.println("office set!");
 		}
 	}
 
 	public Office getOffice() {
 		return office;
+	}
+
+	public void setLastPaid(boolean paid) {
+		this.paid = paid;
 	}
 
 	public Human() {
@@ -80,8 +84,44 @@ public class Human extends Agent{
 	@Override
 	public void compute() {
 		birthday();
-		
 		move();
+		cleanIcons();
+	}
+	
+	@Watch(watcheeClassName = "neighbours.Schedule",
+			watcheeFieldNames = "currHour",
+			triggerCondition = "$watcher.isCurrWorking() "
+			 + "&& $watcher.getLastBored() + $watchee.aHour * 6 <= $watchee.getCurrentTick()",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void increaseBoredom()
+	{
+		boredom++;
+		lastBored = MainContext.instance().getSchedule().getCurrentTick();
+		animatedIcons.add(new BoredomIconAgent(MainContext.instance().getGrid().getLocation(this)));
+	}
+	
+	public int getLastBored() {
+		return lastBored;
+	}
+
+	public int getBoredom() {
+		return boredom;
+	}
+
+	private void cleanIcons()
+	{
+		// Cleaning animated icon
+		if (!animatedIcons.isEmpty())
+		{
+		  ArrayList<IconAgent> toRmv = new ArrayList<>();
+		  
+		  for (IconAgent icon : animatedIcons)
+		  {
+			 if (!MainContext.instance().getContext().contains(icon))
+				 toRmv.add(icon);
+		  }
+		  animatedIcons.removeAll(toRmv);
+		}
 	}
 	
 	private void move()
@@ -138,14 +178,33 @@ public class Human extends Agent{
 		return false;
 	}
 	
+	public boolean getLastPaid()
+	{
+		return paid;
+	}
+	
 	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currDay, currHour",
+			watcheeFieldNames = "currDay",
 			triggerCondition = "$watchee.getCurrDay() == 1 "
-							 + "&& $watchee.getCurrHour() == 1 ",
+							 + "&& $watchee.getCurrHour() == 1 "
+					         + "&& $watcher.getLastPaid() == false",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void getPaid() {
-		if (office != null)
-		   setMoney(getMoney() + office.getSalary());
+	public void getPaid() 
+	{
+		
+		if (office != null && !getLastPaid())
+		    setMoney(getMoney() + office.getSalary());
+		
+		setLastPaid(true);
+	}
+	
+	@Watch(watcheeClassName = "neighbours.Schedule",
+			watcheeFieldNames = "currDay",
+			triggerCondition = "$watchee.getCurrDay() == 2 ",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void resetLastPaid()
+	{
+		setLastPaid(false);
 	}
 
 	@Watch(watcheeClassName = "neighbours.Office",
@@ -156,6 +215,7 @@ public class Human extends Agent{
 	public void goToWork() {
 		if (office != null && home != null)
 		{
+			isCurrWorking = true;
 			moveBuilding2Building(home, office);
 		}
 	}
@@ -169,6 +229,7 @@ public class Human extends Agent{
 	{
 		if (office != null && home != null)
 		{
+			isCurrWorking = false;
 			moveBuilding2Building(office, home);
 		}
 	}
@@ -219,10 +280,10 @@ public class Human extends Agent{
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currMonth, currDay, currHour",
+			watcheeFieldNames = "currMonth, currDay",
 			triggerCondition = "$watchee.getCurrDay() == $watcher.getBirth()[0] "
 							 + "&& $watchee.getCurrHour() == 1 "
-							 + "&& $watchee.getCurrMonth() ==$watche.getBirth[]",
+							 + "&& $watchee.getCurrMonth() == $watche.getBirth[1]",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	private void birthday() {
 		setAge(getAge() + 1);

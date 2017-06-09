@@ -41,7 +41,7 @@ public class ContextCreator implements ContextBuilder<Agent>{
 		
 
 		
-		Schedule schedule = new Schedule(2000, 0, 0, 1);
+		Schedule schedule = new Schedule(2000, 0, 0, 0);
 		MainContext.instance().getContext().add(schedule);
 		MainContext.instance().setSchedule(schedule);
 

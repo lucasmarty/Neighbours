@@ -13,7 +13,7 @@ public final class Walk extends TransportType {
 	
 	
 	public Walk() {
-		super(40);
+		super(20);
 	}
 
 	@Override

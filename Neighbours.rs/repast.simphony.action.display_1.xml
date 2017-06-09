@@ -15,11 +15,19 @@
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
+      <string>neighbours.MoneyIconAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
       <string>neighbours.Human</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
       <string>neighbours.House</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
+      <string>neighbours.BoredomIconAgent</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
@@ -41,12 +49,20 @@
       <string>neighbours.Road.style_4.xml</string>
     </entry>
     <entry>
+      <string>neighbours.MoneyIconAgent</string>
+      <string>neighbours.MoneyIconAgent.style_1.xml</string>
+    </entry>
+    <entry>
       <string>neighbours.Human</string>
       <string>neighbours.Human.style_7.xml</string>
     </entry>
     <entry>
       <string>neighbours.House</string>
       <string>neighbours.House.style_0.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.BoredomIconAgent</string>
+      <string>neighbours.BoredomIconAgent.style_1.xml</string>
     </entry>
     <entry>
       <string>neighbours.CarAgent</string>
@@ -63,7 +79,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>-1105596512</hashCode>
+    <hashCode>989072011</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -82,12 +98,20 @@
       <int>0</int>
     </entry>
     <entry>
+      <string>neighbours.MoneyIconAgent</string>
+      <int>7</int>
+    </entry>
+    <entry>
       <string>neighbours.Human</string>
       <int>4</int>
     </entry>
     <entry>
       <string>neighbours.House</string>
       <int>1</int>
+    </entry>
+    <entry>
+      <string>neighbours.BoredomIconAgent</string>
+      <int>6</int>
     </entry>
     <entry>
       <string>neighbours.CarAgent</string>

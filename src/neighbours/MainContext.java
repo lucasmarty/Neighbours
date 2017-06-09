@@ -8,6 +8,7 @@ import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import utils.Dijkstraa;
 import repast.simphony.context.Context;
+import repast.simphony.random.RandomHelper;
 
 // Singleton class which holds context, grid, and zoneBuilding
 public class MainContext {
@@ -63,8 +64,8 @@ public class MainContext {
 			}
 			for (Office o : office.getBuildings())
 			{
-				o.setClosure(18);
-				o.setOpening(9);
+				o.setClosure(RandomHelper.nextIntFromTo(15, 20));
+				o.setOpening(RandomHelper.nextIntFromTo(o.getClosure() - 10, o.getClosure() - 7));
 			}
 		}
 		}

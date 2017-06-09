@@ -9,35 +9,30 @@ import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 public class House extends Building {
 
 	private int food;
-	private ArrayList<Human> habitants;
-
-	public House()
-	{
-		habitants = new ArrayList<Human>();
-	}
-
-	public void decreaseUsed()
-	{
-		if (used > 0)
-		 --used;
-	}
-	
-	public void increasedUsed()
-	{
-		if (used < capacity)
-			++used;
-	}
-	
-	public boolean isFull()
-	{
-		return used == capacity;
-	}
+	private ArrayList<Human> habitants = new ArrayList<Human>();
+	private ArrayList<IconAgent> animatedIcons = new ArrayList<>();
+	private boolean hasMoneyIcon = false;
 
 	
 	
 	@Override
 	public void compute() {
-		// TODO Auto-generated method stub
+		// Cleaning animated icon
+		if (!animatedIcons.isEmpty())
+		{
+		  ArrayList<IconAgent> toRmv = new ArrayList<>();
+		  
+		  for (IconAgent icon : animatedIcons)
+		  {
+			 if (!MainContext.instance().getContext().contains(icon))
+			 {
+				 toRmv.add(icon);
+				 if (icon instanceof MoneyIconAgent)
+					 hasMoneyIcon = false;
+			 }
+		  }
+		  animatedIcons.removeAll(toRmv);
+		}
 		
 	}
 
@@ -52,6 +47,21 @@ public class House extends Building {
 		habitants.add(human);
 		return true;
 	}
+	
+	@Watch(watcheeClassName = "neighbours.Human",
+			watcheeFieldNames = "money",
+			query = "linked_from",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void spawnMoneyIcon()
+	{
+		if (!hasMoneyIcon)
+		{
+		animatedIcons.add(new MoneyIconAgent(MainContext.instance().getGrid().getLocation(this)));
+		hasMoneyIcon = true;
+		}
+	}
+	
+	
 	
 	public int getFood() {
 		return food;
