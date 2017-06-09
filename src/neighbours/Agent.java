@@ -1,7 +1,6 @@
 package neighbours;
 
 import repast.simphony.engine.schedule.ScheduledMethod;
-import repast.simphony.space.grid.Grid;
 
 public abstract class Agent {
 
