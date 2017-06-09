@@ -26,6 +26,7 @@ public class MainContext {
 	private boolean debug = true;
 	private Schedule schedule;
 	
+	
 	private MainContext()
 	{
 	}
@@ -210,6 +211,18 @@ public class MainContext {
 		return grid;
 	}
 
+	public ArrayList<BuildingZone<House>> getHouseZones() {
+		return house_zones;
+	}
+	
+	public ArrayList<BuildingZone<Office>> getOfficeZones() {
+		return office_zones;
+	}
+	
+	public ArrayList<BuildingZone<Shop>> getShopZones() {
+		return shop_zones;
+	}
+	
 	public void setGrid(Grid<Agent> grid) {
 		this.grid = grid;
 	}

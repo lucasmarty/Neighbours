@@ -28,6 +28,7 @@ public class Human extends Agent{
 	private int money;
 	private boolean hungry;
 	private boolean moving;
+	private boolean isCurrWorking;
 	private int health;
 	private Queue<Trajectory> traj_queue;
 	private Trajectory currentTraj;
@@ -71,6 +72,7 @@ public class Human extends Agent{
 		this.setMoney(money);
 		this.health = health;
 		this.setHungry(false);
+		this.setCurrWorking(false);
 		moving = false;
 		traj_queue = new LinkedList<>();
 	}
@@ -118,7 +120,23 @@ public class Human extends Agent{
 			}
 		}
 	}
-
+	
+	
+	public boolean canShop() {
+		if (isCurrWorking)
+			return false;
+		ArrayList<BuildingZone<Shop>> shop_zones = MainContext.instance().getShopZones();
+		if (shop_zones == null)
+			return false;
+		for (BuildingZone<Shop> shop_zone : shop_zones) {
+			for (Shop shop : shop_zone.getBuildings())
+			{
+				if (shop.isOpened())
+					return true;
+			}
+		}
+		return false;
+	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currDay, currHour",
@@ -264,5 +282,13 @@ public class Human extends Agent{
 
 	public void setBirth(int[] birth) {
 		this.birth = birth;
+	}
+
+	public boolean isCurrWorking() {
+		return isCurrWorking;
+	}
+
+	public void setCurrWorking(boolean isCurrWorking) {
+		this.isCurrWorking = isCurrWorking;
 	}
 }
