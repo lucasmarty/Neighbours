@@ -37,7 +37,6 @@ public class Human extends Agent{
 		return office;
 	}
 
-	private Schedule schedule;
 	public Human() {
 		
 	}
@@ -53,7 +52,6 @@ public class Human extends Agent{
 		this.setHungry(false);
 		moving = false;
 		traj_queue = new LinkedList<>();
-		schedule = MainContext.instance().getSchedule();
 	}
 
 	@Override
@@ -113,8 +111,8 @@ public class Human extends Agent{
 	
 	@Watch(watcheeClassName = "neighbours.Office",
 			watcheeFieldNames = "opened",
-			triggerCondition = "$watchee.isOpened() == false"
-					+ " && $watchee.getId() == $watcher.getOffice().getId()",
+			triggerCondition = "$watchee.isOpened() == false " + 
+					 " &&  $watchee.getId() == $watcher.getOffice().getId()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE
 			)
 	public void closeOffice()
