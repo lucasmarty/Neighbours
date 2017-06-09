@@ -3,6 +3,7 @@ package neighbours;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+import repast.simphony.space.graph.Network;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridPoint;
 import utils.Dijkstraa;
@@ -26,6 +27,11 @@ public class MainContext {
 	
 	private MainContext()
 	{
+	}
+	
+	public Network<Agent> getNetworkBuilding()
+	{
+		return (Network<Agent>)context.getProjection("building network");
 	}
 	
 	public void generate_building_zones()

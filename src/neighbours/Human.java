@@ -52,6 +52,8 @@ public class Human extends Agent{
 		this.setHungry(false);
 		moving = false;
 		traj_queue = new LinkedList<>();
+		
+		MainContext.instance().getNetworkBuilding().addEdge(this, office);
 	}
 
 	@Override
@@ -95,10 +97,11 @@ public class Human extends Agent{
 
 	@Watch(watcheeClassName = "neighbours.Office",
 			watcheeFieldNames = "opened",
-			triggerCondition = "$watchee.isOpened",
+			query = "linked_to",
+			triggerCondition = "$watchee.isOpened() == true",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void goToWork() {
-		// TODO
+		System.out.println("schedule path to work");
 	}
 	
 	public void goShopping() {
@@ -111,11 +114,10 @@ public class Human extends Agent{
 	
 	@Watch(watcheeClassName = "neighbours.Office",
 			watcheeFieldNames = "opened",
-			triggerCondition = "$watchee.isOpened() == false " + 
-					 " &&  $watchee.getId() == $watcher.getOffice().getId()",
-			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE
-			)
-	public void closeOffice()
+			query = "linked_to",
+			triggerCondition = "$watchee.isOpened() == false",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void goHome()
 	{
 		
 		System.out.println("schedule path to home");

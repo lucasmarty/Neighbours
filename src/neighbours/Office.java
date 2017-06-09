@@ -13,9 +13,9 @@ public class Office extends Building {
 	
 	static private int idCounter = 0;
 	
-	private boolean opened;
+	private boolean opened = true;
 	
-	private int salary;
+	private int salary = 0;
 
 	private int id = ++idCounter;
 	
@@ -33,22 +33,24 @@ public class Office extends Building {
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
 			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening()"
-					 + " && $watchee.getCurrDay() != 6" 
-					 + " && $watchee.getCurrDay() != 7",
+					 /*+ " && $watchee.getCurrDay() != 6" 
+					 + " && $watchee.getCurrDay() != 7"*/,
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	private void open() {
+		System.out.println("open ! " + opened);
 		if (!opened)
 			this.setOpened(true);
 	}
 	
-
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
 			triggerCondition = "$watchee.getCurrHour() == $watcher.getClosure()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void close() {
-		this.setOpened(false);
+		if (opened)
+		   this.setOpened(false);	
+		
 	}
 
 	public int getOpening() {
