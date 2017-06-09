@@ -132,7 +132,7 @@ public class Dijkstraa {
 						empty = false;
 					for (Class<? extends Agent> objAuth : agentUsed)
 					{
-						if (obj.getClass().equals(objAuth))
+						if (objAuth.isInstance(obj))
 						{
 							suitable = true;
 							break;

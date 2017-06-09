@@ -74,12 +74,15 @@ public class Human extends Agent{
 		{
 			if (currentTraj.isFinished())
 			{
+				MainContext.instance().getGrid().moveTo(this, currentTraj.getEnd().getX(),
+						currentTraj.getEnd().getY());
 				moving = false;
 				currentTraj = null;
 			}
 			else
 			{
 				GridPoint pt = currentTraj.step();
+				//if (currentTraj.getTransporType().isInstance(Car.class))
 				MainContext.instance().getGrid().moveTo(this, pt.getX(), pt.getY());
 			}
 		}
@@ -92,7 +95,7 @@ public class Human extends Agent{
 							 + "&& $watchee.getCurrHour() == 1 ",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() {
-		//setMoney(getMoney() + office.getSalary());
+		setMoney(getMoney() + office.getSalary());
 	}
 
 	@Watch(watcheeClassName = "neighbours.Office",
@@ -101,7 +104,24 @@ public class Human extends Agent{
 			triggerCondition = "$watchee.isOpened() == true",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void goToWork() {
-		System.out.println("schedule path to work");
+		if (office != null && home != null)
+		{
+		GridPoint from = home.getStartingPos();
+		GridPoint to = office.getStartingPos();
+		GridPoint end = MainContext.instance().getGrid().getLocation(office);
+		
+		System.out.println("Starting point from: " + MainContext.instance().getGrid().getLocation(home)
+				+ " is " + from);
+		
+		System.out.println("Starting point from: " + end
+				+ " is " + to);
+		try {
+			planNextPath(from, to, end, Car.class);
+		} catch (InstantiationException | IllegalAccessException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 	}
 	
 	public void goShopping() {
@@ -120,22 +140,26 @@ public class Human extends Agent{
 	public void goHome()
 	{
 		
-		System.out.println("schedule path to home");
-		/*GridPoint from = office.getStartingPos();
+		if (office != null && home != null)
+		{
+		GridPoint from = office.getStartingPos();
 		GridPoint to = home.getStartingPos();
+		GridPoint end = MainContext.instance().getGrid().getLocation(home);
 		try {
-			planNextPath(from, to, Car.class);
+			planNextPath(from, to, end, Car.class);
 		} catch (InstantiationException | IllegalAccessException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}*/
+		}
+		}
 	}
 	
-	private void planNextPath(GridPoint from, GridPoint dest, Class<? extends TransportType> transport) 
+	private void planNextPath(GridPoint from, GridPoint dest, GridPoint end, Class<? extends TransportType> transport) 
 			throws InstantiationException, IllegalAccessException
 	{
 		TransportType tr = transport.newInstance();
 		int[][] weightMap = tr.generateWeightMap();
+		
 		
 		HashSet<GridPoint> destPt = new HashSet<>();
 		destPt.add(dest);
@@ -143,7 +167,7 @@ public class Human extends Agent{
 		
 		
 		ArrayList<GridPoint> path = djk.shortestPathTo(destPt, from);
-		Trajectory traj = new Trajectory(path, tr.getStep());
+		Trajectory traj = new Trajectory(path, end, tr.getStep(), transport);
 		
 		traj_queue.add(traj);
 	}

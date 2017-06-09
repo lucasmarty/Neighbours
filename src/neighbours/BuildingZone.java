@@ -31,14 +31,33 @@ public class BuildingZone<T extends Building> {
 				|| pos.getY() < origin_y || pos.getY() >= origin_y + side_len)
 			throw new IllegalArgumentException("Error pos not in zone");
 		
-		int middle_x = side_len / 2;
-		int middle_y = side_len / 2;
+		int middle = side_len / 2;
 		
-		int x = pos.getX() < origin_x + middle_x ? origin_x - 1 : origin_x + side_len + 1;
-		int y = pos.getY() < origin_y + middle_y ? origin_y - 1 : origin_y + side_len + 1;
+		int dist_ori_x = pos.getX() - origin_x;
+		int dist_end_x = origin_x + side_len - 1 - pos.getX();
+		
+		int dist_ori_y = pos.getY() - origin_y;
+		int dist_end_y = origin_y + side_len - 1 - pos.getY();
 
+		int x = pos.getX();
+		int y = pos.getY();
+		
+		if (dist_ori_x < dist_end_x && dist_ori_x < Math.min(dist_end_y, dist_ori_y))
+		{
+			x = origin_x - 1;
+		}
+		else if (dist_end_x <= dist_ori_x && dist_end_x < Math.min(dist_end_y, dist_ori_y))
+		{
+			x = origin_x + side_len;
+		}
+		else if (dist_end_y < dist_ori_y)
+			y = origin_y + side_len;
+		else
+			y = origin_y - 1;
+		
 		x = x < 0 ? 0 : x >= MainContext.instance().getWidth() ? MainContext.instance().getWidth() - 1 : x; 
 		y = y < 0 ? 0 : y >= MainContext.instance().getHeight() ? MainContext.instance().getHeight() - 1 : y;
+		
 		return new GridPoint(x, y);
 	}
 	
