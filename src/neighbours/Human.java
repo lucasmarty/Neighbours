@@ -39,6 +39,10 @@ public class Human extends Agent{
 	private RepastEdge<Agent> edge_office;
 	private Office office;
 	
+	public Office getOffice() {
+		return office;
+	}
+
 	public void setOffice(Office office) {
 		
 		if (this.office != null && this.edge_office != null)
@@ -56,25 +60,27 @@ public class Human extends Agent{
 		  System.out.println("office set!");
 		}
 	}
-
-	public Office getOffice() {
-		return office;
-	}
-
+	
 	public Human() {
 		
 	}
-	
+		
+
 	public Human(int age, int[] birth, int money, int health)
 	{
 		this.setAge(age);
 		this.setBirth(birth);
 		this.setMoney(money);
 		this.health = health;
+		this.setHome(home);
+		this.office = office;
 		this.setHungry(false);
 		this.setCurrWorking(false);
 		moving = false;
 		traj_queue = new LinkedList<>();
+		
+		MainContext.instance().getNetworkBuilding().addEdge(this, office);
+		MainContext.instance().getNetworkBuilding().addEdge(this, home);
 	}
 
 	@Override
@@ -122,20 +128,16 @@ public class Human extends Agent{
 	}
 	
 	
-	public boolean canShop() {
-		if (isCurrWorking)
-			return false;
+	public Shop findShop() {
 		ArrayList<BuildingZone<Shop>> shop_zones = MainContext.instance().getShopZones();
-		if (shop_zones == null)
-			return false;
 		for (BuildingZone<Shop> shop_zone : shop_zones) {
 			for (Shop shop : shop_zone.getBuildings())
 			{
 				if (shop.isOpened())
-					return true;
+					return shop;
 			}
 		}
-		return false;
+		return null;
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
@@ -144,8 +146,7 @@ public class Human extends Agent{
 							 + "&& $watchee.getCurrHour() == 1 ",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() {
-		if (office != null)
-		   setMoney(getMoney() + office.getSalary());
+		setMoney(getMoney() + office.getSalary());
 	}
 
 	@Watch(watcheeClassName = "neighbours.Office",
@@ -160,17 +161,12 @@ public class Human extends Agent{
 		}
 	}
 	
-	@Watch(watcheeClassName = "neighbours.Office",
-			watcheeFieldNames = "opened",
-			query = "linked_to",
-			triggerCondition = "$watchee.isOpened() == false",
+	@Watch(watcheeClassName = "neighbours.Schedule",
+			watcheeFieldNames = "currHour",
+			triggerCondition = "$watchee.getCurrHour() == $watchee.getHome().getTimeToEat()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void goHome()
-	{
-		if (office != null && home != null)
-		{
-			moveBuilding2Building(office, home);
-		}
+	public void triggerHungger() {
+		setHungry(true);
 	}
 	
 	private void moveBuilding2Building(Building start, Building stop)
@@ -190,15 +186,46 @@ public class Human extends Agent{
 		}
 	}
 	
-	public void goShopping() {
-		// TODO
+	@Watch(watcheeClassName = "neighbours.House",
+			watcheeFieldNames = "food",
+			query = "linked_to",
+			triggerCondition = "$watchee.getFood() <= $watchee.getTesholdFood())",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void scheduleShopping() {
+		if (!isCurrWorking)
+		{
+			Shop shop = findShop();
+			if(shop != null)
+				moveBuilding2Building(home, shop);
+		}
+	}
+	
+	@Watch(watcheeClassName = "neighbours.Shop",
+			watcheeFieldNames = "opened",
+			query = "within 0",
+			triggerCondition = "$watchee.getOpened() == true)",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void shopping() {
+		System.out.println("Buy food");
 	}
 	
 	private void death() {
 		MainContext.instance().getContext().remove(this);
 	}
 	
-	
+	@Watch(watcheeClassName = "neighbours.Office",
+			watcheeFieldNames = "opened",
+			query = "linked_to",
+			triggerCondition = "$watchee.isOpened() == false",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void goHome()
+	{
+		
+		if (office != null && home != null)
+		{
+			moveBuilding2Building(office, home);
+		}
+	}
 	
 	private void planNextPath(GridPoint from, GridPoint dest, Class<? extends TransportType> transport) 
 			throws InstantiationException, IllegalAccessException
@@ -261,19 +288,7 @@ public class Human extends Agent{
 	}
 
 	public void setHome(House home) {
-		if (this.home != null && this.edge_home != null)
-		{
-			MainContext.instance().getNetworkBuilding().removeEdge(edge_home);
-			this.home.decreaseUsed();
-		}
-		
 		this.home = home;
-		if (this.home != null)
-		{
-		  edge_home = MainContext.instance().getNetworkBuilding().addEdge(this, this.home);
-		
-		  this.home.increasedUsed();
-		}
 	}
 
 	public int[] getBirth() {

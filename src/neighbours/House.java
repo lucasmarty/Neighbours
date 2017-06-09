@@ -8,32 +8,16 @@ import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 
 public class House extends Building {
 
-	private int food;
+	private int food; 
+	private static int thesholdFood = 20;
+	private int timeToEat = 20; // hours[1->24]
+	
 	private ArrayList<Human> habitants;
 
 	public House()
 	{
 		habitants = new ArrayList<Human>();
 	}
-
-	public void decreaseUsed()
-	{
-		if (used > 0)
-		 --used;
-	}
-	
-	public void increasedUsed()
-	{
-		if (used < capacity)
-			++used;
-	}
-	
-	public boolean isFull()
-	{
-		return used == capacity;
-	}
-
-	
 	
 	@Override
 	public void compute() {
@@ -53,11 +37,36 @@ public class House extends Building {
 		return true;
 	}
 	
+	@Watch(watcheeClassName = "neighbours.Human",
+			watcheeFieldNames = "hungry",
+			query = "linked_from",
+			triggerCondition = "$watchee.getHungry() == true",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void consumeFood() {
+		this.setFood(this.getFood() - 1);
+	}
+	
 	public int getFood() {
 		return food;
 	}
 
 	public void setFood(int food) {
 		this.food = food;
+	}
+
+	public static int getThesholdFood() {
+		return thesholdFood;
+	}
+
+	public static void setThesholdFood(int thesholdFood) {
+		House.thesholdFood = thesholdFood;
+	}
+
+	public int getTimeToEat() {
+		return timeToEat;
+	}
+
+	public void setTimeToEat(int timeToEat) {
+		this.timeToEat = timeToEat;
 	}
 }
