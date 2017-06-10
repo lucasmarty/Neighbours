@@ -14,6 +14,10 @@ public class House extends Building {
 	private boolean hasMoneyIcon = false;
 
 	
+	private static int thesholdFood = 20;
+	private int timeToEat = 20; // hours[1->24]
+	
+
 	
 	@Override
 	public void compute() {
@@ -62,6 +66,14 @@ public class House extends Building {
 	}
 	
 	
+	@Watch(watcheeClassName = "neighbours.Human",
+			watcheeFieldNames = "hungry",
+			query = "linked_from",
+			triggerCondition = "$watchee.getHungry() == true",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void consumeFood() {
+		this.setFood(this.getFood() - 1);
+	}
 	
 	public int getFood() {
 		return food;
@@ -69,5 +81,21 @@ public class House extends Building {
 
 	public void setFood(int food) {
 		this.food = food;
+	}
+
+	public static int getThesholdFood() {
+		return thesholdFood;
+	}
+
+	public static void setThesholdFood(int thesholdFood) {
+		House.thesholdFood = thesholdFood;
+	}
+
+	public int getTimeToEat() {
+		return timeToEat;
+	}
+
+	public void setTimeToEat(int timeToEat) {
+		this.timeToEat = timeToEat;
 	}
 }
