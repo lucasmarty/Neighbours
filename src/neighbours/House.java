@@ -52,7 +52,6 @@ public class House extends Building {
 				   
 				}
 			}
-			System.out.println("eating !");
 			--food;
 		}
 	}
