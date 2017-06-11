@@ -29,7 +29,7 @@ public class MainContext {
 	}
 
 	private ArrayList<Integer> nb_human_per_zones = null;
-	private boolean debug = true;
+	private boolean debug = false;
 	private Schedule schedule;
 	
 	
@@ -171,6 +171,7 @@ public class MainContext {
 		zones.addAll(office_zones);
 		zones.addAll(shop_zones);
 		zones.addAll(house_zones);
+		zones.addAll(movie_zones);
 		
 		for (int idx = 0; idx < zones.size(); ++idx)
 		{

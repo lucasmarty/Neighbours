@@ -8,7 +8,7 @@ import neighbours.Road;
 public final class Car extends TransportType {
 
 	public Car() {
-		super(5);
+		super(2);
 	}
 
 	@Override

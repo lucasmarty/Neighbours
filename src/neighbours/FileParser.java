@@ -51,7 +51,7 @@ public class FileParser {
 					BuildingZone<Shop> zone = new BuildingZone<>(orig_x, orig_y, nb_building, Shop.class, capa);
 					MainContext.instance().add_shop_zone(zone);
 				}
-				else if (param[0].trim().equals("movie"))
+				else if (param[0].trim().equals("cinema"))
 				{
 					BuildingZone<MovieTheater> zone = new BuildingZone<>(orig_x, orig_y, nb_building, MovieTheater.class, capa);
 					MainContext.instance().add_movie_zone(zone);

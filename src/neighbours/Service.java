@@ -27,11 +27,8 @@ public abstract class Service extends Building {
 			return;
 		
 		if (human.getMoney() >= cost)
-		{
 		   implementService(human);
-		}
-		else
-			System.out.println("Not enough money !");
+
 		
 		human.serviceDone(this);
 		human.goHomeFrom(this);
@@ -59,7 +56,7 @@ public abstract class Service extends Building {
 					ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
 					
 					scheduleSim.schedule(params, this, "provideService", h);
-					System.out.println("Succesfully scheduled service");
+					h.setAtService(true);
 				}	
 			}
 		}

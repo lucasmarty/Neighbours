@@ -20,7 +20,6 @@ public class Shop extends Service {
 		   human.setMoney(human.getMoney() - cost);
 		   if (human.getHome() != null)
 			   human.getHome().setFood(human.getHome().getFood() + foodPerService);
-		   System.out.println("Human bought food !");
 	}
 
 	

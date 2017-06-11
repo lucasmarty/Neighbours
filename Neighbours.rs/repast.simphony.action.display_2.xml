@@ -12,7 +12,7 @@
     </entry>
     <entry>
       <string>neighbours.MovieTheater</string>
-      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
       <string>neighbours.Human</string>
@@ -34,7 +34,7 @@
     </entry>
     <entry>
       <string>neighbours.MovieTheater</string>
-      <null/>
+      <string>neighbours.MovieTheater.style_2.xml</string>
     </entry>
     <entry>
       <string>neighbours.Human</string>
@@ -65,7 +65,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1184587757</hashCode>
+    <hashCode>805731825</hashCode>
   </schedParams>
   <layoutClassName>repast.simphony.visualization.visualization2D.Random2DLayout</layoutClassName>
   <layoutProjection>building network</layoutProjection>

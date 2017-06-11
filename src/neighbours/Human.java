@@ -29,6 +29,15 @@ public class Human extends Agent{
 	private boolean moving;
 	private int initHealth;
 	private boolean isCurrWorking = false;
+	private boolean isAtService = false;
+	public boolean isAtService() {
+		return isAtService;
+	}
+
+	public void setAtService(boolean isAtService) {
+		this.isAtService = isAtService;
+	}
+
 	private int health;
 	private int boredom = 0;
 	private int lastBored = 1;
@@ -94,7 +103,11 @@ public class Human extends Agent{
 		if (boredom > this.boredom)
 		   animatedIcons.add(new BoredomIconAgent(MainContext.instance().getGrid().getLocation(this)));
 		else if (boredom < this.boredom)
-			animatedIcons.add(new HappyIconAgent(MainContext.instance().getGrid().getLocation(this)));
+		{
+			GridPoint pt = MainContext.instance().getGrid().getLocation(this);
+			GridPoint side = new GridPoint(pt.getX() - 1, pt.getY());
+			animatedIcons.add(new HappyIconAgent(side));
+		}
 		this.boredom = boredom;
 	}
 
@@ -175,7 +188,7 @@ public class Human extends Agent{
 	
 	private void move()
 	{
-		if (!moving && !traj_queue.isEmpty())
+		if (!moving && !traj_queue.isEmpty() && !isAtService)
 		{
 			moving = true;
 			currentTraj = traj_queue.remove();
@@ -216,18 +229,14 @@ public class Human extends Agent{
 	
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currDay, currHour",
-			triggerCondition = "$watchee.getCurrDay() == 1 "
-							 + "&& $watchee.getCurrHour() == 1",
+			watcheeFieldNames = "currDay",
+			triggerCondition = "$watchee.getCurrDay() == 1 ",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() 
 	{
-		
 		if (office != null)
-		{
-			System.out.println("got " + office.getSalary() + " as salary");
 		    setMoney(getMoney() + office.getSalary());
-		}
+		
 		
 	}
 	
@@ -311,9 +320,15 @@ public class Human extends Agent{
 		ScheduleParameters  params = ScheduleParameters.createRepeating(tick, tickPerHour);
 		ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
 		
-		scheduleShopping = scheduleSim.schedule(params, this, "tryShopping");
-		home.setShoppingScheduled(true);
-		System.out.println("Scheduling shop");
+		Boolean notEnoughMoney = Boolean.FALSE;
+		boolean tryS = tryShopping(notEnoughMoney, false);
+		if (!tryS && !notEnoughMoney)
+		{
+		   scheduleShopping = scheduleSim.schedule(params, this, "tryShopping", notEnoughMoney, true);
+		   home.setShoppingScheduled(true);
+		}
+		else if (tryS)
+			home.setShoppingScheduled(true);
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Human",
@@ -330,7 +345,7 @@ public class Human extends Agent{
 		
 		ScheduleParameters  params = ScheduleParameters.createRepeating(tick, tickPerHour);
 		ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
-		
+
 		scheduleMovie = scheduleSim.schedule(params, this, "tryMovie");
 		scheduledMovie = true;
 		}
@@ -342,30 +357,33 @@ public class Human extends Agent{
 		scheduleSim.removeAction(action);
 	}
 	
-	public void tryShopping()
+	public boolean tryShopping(Boolean notEnoughMoney, Boolean scheduled)
 	{
 		if (!isCurrWorking && MainContext.instance().getShopZones() != null)
 		{
 			Service shop = null;
 			for (BuildingZone<? extends Service> zone : MainContext.instance().getShopZones())
 			{
-			    shop = findService(zone);
+			    shop = findService(zone, notEnoughMoney);
 			    if (shop != null)
 			    	break;
 			}
 			if(shop != null)
 			{
-				
+				if (scheduled)
+				{
 				int tick = MainContext.instance().getSchedule().getCurrentTick();
 				
 				ScheduleParameters  params = ScheduleParameters.createOneTime(tick + 2);
 				ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
 				scheduleSim.schedule(params, this, "removeSchedule", scheduleShopping);
+				}
 				
-				System.out.println("Going to shop");
 				goToService(shop);
+				return true;
 			}
 		}
+		return false;
 	}
 	
 	public void tryMovie()
@@ -375,7 +393,8 @@ public class Human extends Agent{
 			Service movie = null;
 			for (BuildingZone<? extends Service> zone : MainContext.instance().getMovie_zones())
 			{
-			    movie = findService(zone);
+				Boolean notEnoughMoney = new Boolean(false);
+			    movie = findService(zone, notEnoughMoney);
 			    if (movie != null)
 			    	break;
 			}
@@ -393,15 +412,21 @@ public class Human extends Agent{
 		}
 	}
 	
-	public Service findService(BuildingZone<? extends Service> zone) {
+	public Service findService(BuildingZone<? extends Service> zone, Boolean moneyNotEnough) {
 		
+		moneyNotEnough = Boolean.FALSE;
 			for (Service s : zone.getBuildings())
 			{
 				int timePlusService = MainContext.instance().getSchedule().getCurrHour() + s.getTimePerService();
+				
 				if (s.isOpened() && !s.isFull() 
-						&& timePlusService < s.getClosure()
-						&& money >= s.getCost())
-					return s;
+						&& timePlusService < s.getClosure())
+				{
+					if ( money >= s.getCost())
+					   return s;
+					else
+						moneyNotEnough = Boolean.TRUE; 
+				}
 			}
 		
 		return null;
@@ -426,6 +451,8 @@ public class Human extends Agent{
 			this.home.setShoppingScheduled(false);
 		else if (s instanceof MovieTheater)
 			scheduledMovie = false;
+		
+		isAtService = false;
 	}
 	
 	private void death() {
@@ -472,9 +499,8 @@ public class Human extends Agent{
 			triggerCondition = "$watcher.isHungry() == true",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void starve() {
-		System.out.println("Starving !");
 		health -= 10;
-		if (health < 0)
+		if (health <= 0)
 			animatedIcons.add(new DeathIconAgent(MainContext.instance().getGrid().getLocation(this)));
 	}
 

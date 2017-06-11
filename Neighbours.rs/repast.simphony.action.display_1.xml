@@ -11,6 +11,10 @@
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
+      <string>neighbours.MovieTheater</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
       <string>neighbours.MoneyPlusIconAgent</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
@@ -55,6 +59,10 @@
     <entry>
       <string>neighbours.Office</string>
       <string>neighbours.Office.style_1.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.MovieTheater</string>
+      <string>neighbours.MovieTheater.style_1.xml</string>
     </entry>
     <entry>
       <string>neighbours.MoneyPlusIconAgent</string>
@@ -103,7 +111,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1184587757</hashCode>
+    <hashCode>805731825</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -111,19 +119,23 @@
   <layerOrder>
     <entry>
       <string>neighbours.Shop</string>
-      <int>3</int>
+      <int>4</int>
     </entry>
     <entry>
       <string>neighbours.Office</string>
-      <int>2</int>
+      <int>3</int>
+    </entry>
+    <entry>
+      <string>neighbours.MovieTheater</string>
+      <int>1</int>
     </entry>
     <entry>
       <string>neighbours.MoneyPlusIconAgent</string>
-      <int>10</int>
+      <int>11</int>
     </entry>
     <entry>
       <string>neighbours.MoneyLessIconAgent</string>
-      <int>9</int>
+      <int>10</int>
     </entry>
     <entry>
       <string>neighbours.Road</string>
@@ -131,27 +143,27 @@
     </entry>
     <entry>
       <string>neighbours.Human</string>
-      <int>4</int>
+      <int>5</int>
     </entry>
     <entry>
       <string>neighbours.DeathIconAgent</string>
-      <int>8</int>
+      <int>9</int>
     </entry>
     <entry>
       <string>neighbours.House</string>
-      <int>1</int>
+      <int>2</int>
     </entry>
     <entry>
       <string>neighbours.BoredomIconAgent</string>
-      <int>6</int>
-    </entry>
-    <entry>
-      <string>neighbours.HappyIconAgent</string>
       <int>7</int>
     </entry>
     <entry>
+      <string>neighbours.HappyIconAgent</string>
+      <int>8</int>
+    </entry>
+    <entry>
       <string>neighbours.CarAgent</string>
-      <int>5</int>
+      <int>6</int>
     </entry>
   </layerOrder>
   <projections>
