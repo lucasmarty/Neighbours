@@ -11,15 +11,23 @@
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
+      <string>neighbours.MoneyPlusIconAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
+      <string>neighbours.MoneyLessIconAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
       <string>neighbours.Road</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
-      <string>neighbours.MoneyIconAgent</string>
+      <string>neighbours.Human</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
-      <string>neighbours.Human</string>
+      <string>neighbours.DeathIconAgent</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
@@ -28,6 +36,10 @@
     </entry>
     <entry>
       <string>neighbours.BoredomIconAgent</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
+      <string>neighbours.HappyIconAgent</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
@@ -45,16 +57,24 @@
       <string>neighbours.Office.style_1.xml</string>
     </entry>
     <entry>
+      <string>neighbours.MoneyPlusIconAgent</string>
+      <string>neighbours.MoneyPlusIconAgent.style_1.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.MoneyLessIconAgent</string>
+      <string>neighbours.MoneyLessIconAgent.style_1.xml</string>
+    </entry>
+    <entry>
       <string>neighbours.Road</string>
       <string>neighbours.Road.style_4.xml</string>
     </entry>
     <entry>
-      <string>neighbours.MoneyIconAgent</string>
-      <string>neighbours.MoneyIconAgent.style_1.xml</string>
-    </entry>
-    <entry>
       <string>neighbours.Human</string>
       <string>neighbours.Human.style_7.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.DeathIconAgent</string>
+      <string>neighbours.DeathIconAgent.style_1.xml</string>
     </entry>
     <entry>
       <string>neighbours.House</string>
@@ -63,6 +83,10 @@
     <entry>
       <string>neighbours.BoredomIconAgent</string>
       <string>neighbours.BoredomIconAgent.style_1.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.HappyIconAgent</string>
+      <string>neighbours.HappyIconAgent.style_1.xml</string>
     </entry>
     <entry>
       <string>neighbours.CarAgent</string>
@@ -79,7 +103,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>989072011</hashCode>
+    <hashCode>793949428</hashCode>
   </schedParams>
   <layoutClassName>foo.bar.baz</layoutClassName>
   <layoutProjection>grid</layoutProjection>
@@ -94,16 +118,24 @@
       <int>2</int>
     </entry>
     <entry>
+      <string>neighbours.MoneyPlusIconAgent</string>
+      <int>10</int>
+    </entry>
+    <entry>
+      <string>neighbours.MoneyLessIconAgent</string>
+      <int>9</int>
+    </entry>
+    <entry>
       <string>neighbours.Road</string>
       <int>0</int>
     </entry>
     <entry>
-      <string>neighbours.MoneyIconAgent</string>
-      <int>7</int>
-    </entry>
-    <entry>
       <string>neighbours.Human</string>
       <int>4</int>
+    </entry>
+    <entry>
+      <string>neighbours.DeathIconAgent</string>
+      <int>8</int>
     </entry>
     <entry>
       <string>neighbours.House</string>
@@ -112,6 +144,10 @@
     <entry>
       <string>neighbours.BoredomIconAgent</string>
       <int>6</int>
+    </entry>
+    <entry>
+      <string>neighbours.HappyIconAgent</string>
+      <int>7</int>
     </entry>
     <entry>
       <string>neighbours.CarAgent</string>

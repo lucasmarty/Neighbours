@@ -23,6 +23,11 @@ public class MainContext {
 	private ArrayList<BuildingZone<House>> house_zones = null;
 	private ArrayList<BuildingZone<Office>> office_zones = null;
 	private ArrayList<BuildingZone<Shop>> shop_zones = null;
+	private ArrayList<BuildingZone<MovieTheater>> movie_zones = null;
+	public ArrayList<BuildingZone<MovieTheater>> getMovie_zones() {
+		return movie_zones;
+	}
+
 	private ArrayList<Integer> nb_human_per_zones = null;
 	private boolean debug = true;
 	private Schedule schedule;
@@ -79,7 +84,35 @@ public class MainContext {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+			for (Shop s : shop.getBuildings())
+			{
+				s.setFoodPerService(RandomHelper.nextIntFromTo(5, 15));
+				s.setCost(RandomHelper.nextIntFromTo(150, 500));
+				s.setTimePerService(1);
+				s.setClosure(RandomHelper.nextIntFromTo(17, 23));
+				s.setOpening(RandomHelper.nextIntFromTo(s.getClosure() - 10, s.getClosure() - 7));
+			}
 		}
+		}
+		if (movie_zones != null)
+		{
+			for (BuildingZone<MovieTheater> movie : movie_zones)
+			{
+				try {
+					movie.generates_buildings();
+				} catch (InstantiationException | IllegalAccessException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+				for (MovieTheater m : movie.getBuildings())
+				{
+					m.setEntertain(RandomHelper.nextIntFromTo(3, 7));
+					m.setCost(RandomHelper.nextIntFromTo(150, 500));
+					m.setTimePerService(1);
+					m.setClosure(RandomHelper.nextIntFromTo(17, 23));
+					m.setOpening(RandomHelper.nextIntFromTo(m.getClosure() - 10, m.getClosure() - 7));
+				}
+			}
 		}
 		
 		generateRoad();
@@ -192,6 +225,16 @@ public class MainContext {
 			shop_zones = new ArrayList<BuildingZone<Shop>>();
 		shop_zones.add(s_zone);
 	}
+	
+	public void add_movie_zone(BuildingZone<MovieTheater> m_zone)
+	{
+		if (debug)
+			System.out.println("Added zone movie: " + m_zone.toString());
+		if (movie_zones == null )
+			movie_zones = new ArrayList<BuildingZone<MovieTheater>>();
+		movie_zones.add(m_zone);
+	}
+	
 	
 	public static MainContext instance()
 	{

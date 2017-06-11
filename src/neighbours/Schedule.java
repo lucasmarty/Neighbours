@@ -28,9 +28,18 @@ public class Schedule extends Agent{
 	}
 	
 	public void computeSchedule(double ticks) {
-		this.currHour =(ticks%aHour == 0) ? currHour+1 : (currHour > 24) ? 1 : currHour;
-		this.currDay = (ticks%aDay == 0) ?  currDay+1 : (currDay > 7) ? 1 : currDay;
-		this.currMonth = (ticks%aMonth == 0) ? currMonth+1 : (currMonth > 12 ) ? 1 : currMonth;
+		int newHour =(ticks%aHour == 0) ? currHour+1 : (currHour > 24) ? 1 : currHour;
+		if (newHour != currHour)
+			this.currHour = newHour;
+		
+		int newDay = (ticks%aDay == 0) ?  currDay+1 : (currDay > 7) ? 1 : currDay;
+		if (newDay != currDay)
+			this.currDay = newDay;
+		
+		int newMonth = (ticks%aMonth == 0) ? currMonth+1 : (currMonth > 12 ) ? 1 : currMonth;
+		if (newMonth != currMonth)
+			this.currMonth = newMonth;
+		
 		if (ticks%aYear == 0)
 			this.currYear++;
 	}

@@ -7,15 +7,29 @@ import repast.simphony.space.grid.Grid;
 public class Shop extends Service {
 
 
+	private int foodPerService;
+	
 	@Override
 	public void compute() {
 		
 	}
 
 	@Override
-	public void provideService(Human human) {
-		// TODO Auto-generated method stub
-		
+	protected void implementService(Human human) {
+
+		   human.setMoney(human.getMoney() - cost);
+		   if (human.getHome() != null)
+			   human.getHome().setFood(human.getHome().getFood() + foodPerService);
+		   System.out.println("Human bought food !");
+	}
+
+	
+	public int getFoodPerService() {
+		return foodPerService;
+	}
+
+	public void setFoodPerService(int foodPerService) {
+		this.foodPerService = foodPerService;
 	}
 	
 	

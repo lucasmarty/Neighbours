@@ -3,8 +3,16 @@
   <type>2D</type>
   <styles>
     <entry>
+      <string>neighbours.Shop</string>
+      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
+    </entry>
+    <entry>
       <string>neighbours.Office</string>
       <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
+    </entry>
+    <entry>
+      <string>neighbours.MovieTheater</string>
+      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
     </entry>
     <entry>
       <string>neighbours.Human</string>
@@ -17,8 +25,16 @@
   </styles>
   <editedStyles>
     <entry>
+      <string>neighbours.Shop</string>
+      <null/>
+    </entry>
+    <entry>
       <string>neighbours.Office</string>
       <string>neighbours.Office.style_9.xml</string>
+    </entry>
+    <entry>
+      <string>neighbours.MovieTheater</string>
+      <null/>
     </entry>
     <entry>
       <string>neighbours.Human</string>
@@ -49,23 +65,31 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>1305471039</hashCode>
+    <hashCode>793949428</hashCode>
   </schedParams>
   <layoutClassName>repast.simphony.visualization.visualization2D.Random2DLayout</layoutClassName>
   <layoutProjection>building network</layoutProjection>
   <layoutInterval>0</layoutInterval>
   <layerOrder>
     <entry>
-      <string>neighbours.Office</string>
+      <string>neighbours.Shop</string>
       <int>1</int>
     </entry>
     <entry>
+      <string>neighbours.Office</string>
+      <int>3</int>
+    </entry>
+    <entry>
+      <string>neighbours.MovieTheater</string>
+      <int>0</int>
+    </entry>
+    <entry>
       <string>neighbours.Human</string>
-      <int>2</int>
+      <int>4</int>
     </entry>
     <entry>
       <string>neighbours.House</string>
-      <int>0</int>
+      <int>2</int>
     </entry>
   </layerOrder>
   <projections>

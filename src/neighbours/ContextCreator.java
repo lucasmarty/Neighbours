@@ -8,6 +8,7 @@ import repast.simphony.context.space.graph.NetworkBuilder;
 import repast.simphony.context.space.grid.GridFactory;
 import repast.simphony.context.space.grid.GridFactoryFinder;
 import repast.simphony.dataLoader.ContextBuilder;
+import repast.simphony.engine.schedule.ISchedule;
 import repast.simphony.space.grid.Grid;
 import repast.simphony.space.grid.GridBuilderParameters;
 import repast.simphony.space.grid.SimpleGridAdder;
@@ -18,6 +19,7 @@ public class ContextCreator implements ContextBuilder<Agent>{
 	@Override
 	public Context<Agent> build(Context<Agent> context) {
 		context.setId("Neighbours");
+		
 		
 		NetworkBuilder<Agent> netBuilder = new NetworkBuilder<>("building network", context, true);
 		netBuilder.buildNetwork();
@@ -42,6 +44,7 @@ public class ContextCreator implements ContextBuilder<Agent>{
 
 		
 		Schedule schedule = new Schedule(2000, 0, 0, 0);
+		
 		MainContext.instance().getContext().add(schedule);
 		MainContext.instance().setSchedule(schedule);
 

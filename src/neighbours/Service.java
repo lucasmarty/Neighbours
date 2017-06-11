@@ -1,20 +1,70 @@
 package neighbours;
 
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
+import repast.simphony.space.graph.RepastEdge;
+import repast.simphony.space.grid.GridPoint;
+import net.sf.jasperreports.engine.util.JRStyledText.Run;
+import repast.simphony.engine.environment.RunEnvironment;
 
 public abstract class Service extends Building {
 
 	protected int opening; //  hours[0,24]
 	protected int closure; //  hours[0,24]
 	
-	protected boolean opened;
+	protected boolean opened = false;
 	protected int cost;
 	
+	// in hour
 	protected int timePerService;
 	
 	
-	public abstract void provideService(Human human);
+	public void provideService(Human human)
+	{
+		if (human == null)
+			return;
+		
+		if (human.getMoney() >= cost)
+		{
+		   implementService(human);
+		}
+		
+		human.serviceDone(this);
+		human.goHomeFrom(this);
+		this.decreaseUsed();
+	}
+	
+	@Watch(watcheeClassName = "neighbours.Human",
+			watcheeFieldNames = "moving",
+			query = "linked_from and within_vn 0",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void triggerService()
+	{
+		System.out.println("Trying to trigger service");
+		GridPoint pt = MainContext.instance().getGrid().getLocation(this);
+		for (Agent a : MainContext.instance().getGrid().getObjectsAt(pt.getX(), pt.getY()))
+		{
+			if (a instanceof Human)
+			{
+				Human h = (Human)a;
+				RepastEdge<Agent> edge = MainContext.instance().getNetworkBuilding().getEdge(h, this);
+				if (edge != null)
+				{
+					int tick = MainContext.instance().getSchedule().getCurrentTick();
+					int tickPerHour = MainContext.instance().getSchedule().aHour;
+					ScheduleParameters  params = ScheduleParameters.createOneTime(tick + timePerService * tickPerHour);
+					ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
+					
+					scheduleSim.schedule(params, this, "provideService", h);
+					System.out.println("Succesfully scheduled service");
+				}	
+			}
+		}
+	}
+	
+	protected abstract void implementService(Human human);
 	
 	public int getTimePerService() {
 		return timePerService;
@@ -43,19 +93,22 @@ public abstract class Service extends Building {
 			watcheeFieldNames = "currHour",
 			triggerCondition = "$watchee.getCurrHour() == $watcher.getOpening()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	private void opened() {
-		this.setOpened(true);
+	public void opened() {
+		if (!opened)
+		  this.setOpened(true);
 	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
 			watcheeFieldNames = "currHour",
 			triggerCondition = "$watchee.getCurrHour() == $watcher.getClosure()",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	private void close() {
-		this.setOpened(false);
+	public void close() {
+		if (opened)
+		   this.setOpened(false);
 	}
 
 	public int getOpening() {
+		
 		return opening;
 	}
 

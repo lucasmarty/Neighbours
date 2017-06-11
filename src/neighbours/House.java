@@ -8,36 +8,18 @@ import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 
 public class House extends Building {
 
-	private int food;
+	private int food = 1;
+	private boolean shoppingScheduled = false;
 	private ArrayList<Human> habitants = new ArrayList<Human>();
-	private ArrayList<IconAgent> animatedIcons = new ArrayList<>();
-	private boolean hasMoneyIcon = false;
 
 	
-	private static int thesholdFood = 20;
+	private static int thresholdFood = 10;
 	private int timeToEat = 20; // hours[1->24]
 	
 
 	
 	@Override
 	public void compute() {
-		// Cleaning animated icon
-		if (!animatedIcons.isEmpty())
-		{
-		  ArrayList<IconAgent> toRmv = new ArrayList<>();
-		  
-		  for (IconAgent icon : animatedIcons)
-		  {
-			 if (!MainContext.instance().getContext().contains(icon))
-			 {
-				 toRmv.add(icon);
-				 if (icon instanceof MoneyIconAgent)
-					 hasMoneyIcon = false;
-			 }
-		  }
-		  animatedIcons.removeAll(toRmv);
-		}
-		
 	}
 
 	public ArrayList<Human> getHabitants() {
@@ -52,27 +34,27 @@ public class House extends Building {
 		return true;
 	}
 	
-	@Watch(watcheeClassName = "neighbours.Human",
-			watcheeFieldNames = "money",
-			query = "linked_from",
-			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void spawnMoneyIcon()
-	{
-		if (!hasMoneyIcon)
-		{
-		animatedIcons.add(new MoneyIconAgent(MainContext.instance().getGrid().getLocation(this)));
-		hasMoneyIcon = true;
-		}
-	}
-	
 	
 	@Watch(watcheeClassName = "neighbours.Human",
 			watcheeFieldNames = "hungry",
 			query = "linked_from",
-			triggerCondition = "$watchee.getHungry() == true",
+			triggerCondition = "$watchee.isHungry() == true",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void consumeFood() {
-		this.setFood(this.getFood() - 1);
+		if (food > 0)
+		{
+			for (Agent h : MainContext.instance().getNetworkBuilding().getPredecessors(this))
+			{
+				if (h instanceof Human)
+				{
+				   Human human = (Human)h;
+				   human.setHungry(false);
+				   
+				}
+			}
+			System.out.println("eating !");
+			--food;
+		}
 	}
 	
 	public int getFood() {
@@ -83,12 +65,13 @@ public class House extends Building {
 		this.food = food;
 	}
 
-	public static int getThesholdFood() {
-		return thesholdFood;
+
+	public static int getThresholdFood() {
+		return thresholdFood;
 	}
 
-	public static void setThesholdFood(int thesholdFood) {
-		House.thesholdFood = thesholdFood;
+	public static void setThresholdFood(int thresholdFood) {
+		House.thresholdFood = thresholdFood;
 	}
 
 	public int getTimeToEat() {
@@ -97,5 +80,13 @@ public class House extends Building {
 
 	public void setTimeToEat(int timeToEat) {
 		this.timeToEat = timeToEat;
+	}
+
+	public boolean isShoppingScheduled() {
+		return shoppingScheduled;
+	}
+
+	public void setShoppingScheduled(boolean shoppingScheduled) {
+		this.shoppingScheduled = shoppingScheduled;
 	}
 }

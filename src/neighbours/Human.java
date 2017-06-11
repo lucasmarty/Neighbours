@@ -5,7 +5,11 @@ import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.Queue;
 
-
+import repast.simphony.engine.environment.RunEnvironment;
+import repast.simphony.engine.schedule.IAction;
+import repast.simphony.engine.schedule.ISchedulableAction;
+import repast.simphony.engine.schedule.ISchedule;
+import repast.simphony.engine.schedule.ScheduleParameters;
 import repast.simphony.engine.watcher.Watch;
 import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 import repast.simphony.space.graph.RepastEdge;
@@ -31,34 +35,67 @@ public class Human extends Agent{
 	private Queue<Trajectory> traj_queue;
 	private Trajectory currentTraj;
 	private CarAgent car;
+	private ISchedulableAction scheduleShopping = null;
+	private ISchedulableAction scheduleMovie = null;
+	private boolean scheduledMovie = false;
 	
 
 	private ArrayList<IconAgent> animatedIcons = new ArrayList<>();
 	
 	private House home;
-	private RepastEdge<Agent> edge_home;
-	private RepastEdge<Agent> edge_office;
 	private Office office;
 	
-	public Office getOffice() {
-		return office;
-	}
 
-	public void setOffice(Office office) {
+	public boolean setOffice(Office office) {
 		
-		if (this.office != null && this.edge_office != null)
+		if (this.office != null)
 		{
-			MainContext.instance().getNetworkBuilding().removeEdge(edge_office);
+			RepastEdge<Agent> edge = MainContext.instance().getNetworkBuilding().getEdge(this, this.office);
+			if (edge != null)
+			   MainContext.instance().getNetworkBuilding().removeEdge(edge);
 			this.office.decreaseUsed();
 		}
 		
 		this.office = office;
-		if (this.office != null)
+		if (this.office != null && !this.office.isFull())
 		{
-		  edge_office = MainContext.instance().getNetworkBuilding().addEdge(this, office);
+		  MainContext.instance().getNetworkBuilding().addEdge(this, office);
 		
 		  this.office.increasedUsed();
+		  return true;
 		}
+		
+		return false;
+	}
+	
+	public boolean setHome(House home) {
+		if (this.home != null)
+		{
+			RepastEdge<Agent> edge = MainContext.instance().getNetworkBuilding().getEdge(this, this.home);
+			if (edge != null)
+			   MainContext.instance().getNetworkBuilding().removeEdge(edge);
+			this.home.decreaseUsed();
+		}
+		
+		this.home = home;
+		if (this.home != null && !this.home.isFull())
+		{
+		  MainContext.instance().getNetworkBuilding().addEdge(this, home);
+		
+		  this.home.increasedUsed();
+		  return true;
+		}
+		
+		return false;
+	}
+	
+
+	public void setBoredom(int boredom) {
+		if (boredom > this.boredom)
+		   animatedIcons.add(new BoredomIconAgent(MainContext.instance().getGrid().getLocation(this)));
+		else if (boredom < this.boredom)
+			animatedIcons.add(new HappyIconAgent(MainContext.instance().getGrid().getLocation(this)));
+		this.boredom = boredom;
 	}
 
 	public Office getOffice() {
@@ -68,27 +105,18 @@ public class Human extends Agent{
 	public void setLastPaid(boolean paid) {
 		this.paid = paid;
 	}
-
-	public Human() {
-		
-	}
 		
 
 	public Human(int age, int[] birth, int money, int health)
 	{
 		this.setAge(age);
 		this.setBirth(birth);
-		this.setMoney(money);
+		this.money = money;
 		this.health = health;
-		this.setHome(home);
-		this.office = office;
 		this.setHungry(false);
 		this.setCurrWorking(false);
 		moving = false;
 		traj_queue = new LinkedList<>();
-		
-		MainContext.instance().getNetworkBuilding().addEdge(this, office);
-		MainContext.instance().getNetworkBuilding().addEdge(this, home);
 	}
 
 	@Override
@@ -105,9 +133,18 @@ public class Human extends Agent{
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void increaseBoredom()
 	{
-		boredom++;
+		setBoredom(boredom + 1);
 		lastBored = MainContext.instance().getSchedule().getCurrentTick();
-		animatedIcons.add(new BoredomIconAgent(MainContext.instance().getGrid().getLocation(this)));
+	}
+	
+	public void setMoney(int money) 
+	{
+		
+		if (money > this.money)
+			animatedIcons.add(new MoneyPlusIconAgent(MainContext.instance().getGrid().getLocation(this)));
+		else if (money < this.money)
+			animatedIcons.add(new MoneyLessIconAgent(MainContext.instance().getGrid().getLocation(this)));
+		this.money = money;
 	}
 	
 	public int getLastBored() {
@@ -128,7 +165,12 @@ public class Human extends Agent{
 		  for (IconAgent icon : animatedIcons)
 		  {
 			 if (!MainContext.instance().getContext().contains(icon))
+			 {
 				 toRmv.add(icon);
+				 if (icon instanceof DeathIconAgent)
+					 death();
+			 }
+					 
 		  }
 		  animatedIcons.removeAll(toRmv);
 		}
@@ -172,17 +214,8 @@ public class Human extends Agent{
 	}
 	
 	
-	public Shop findShop() {
-		ArrayList<BuildingZone<Shop>> shop_zones = MainContext.instance().getShopZones();
-		for (BuildingZone<Shop> shop_zone : shop_zones) {
-			for (Shop shop : shop_zone.getBuildings())
-			{
-				if (shop.isOpened())
-					return shop;
-			}
-		}
-		return null;
-	}
+	
+
 	
 	public boolean getLastPaid()
 	{
@@ -226,9 +259,10 @@ public class Human extends Agent{
 		}
 	}
 	
-	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currHour",
-			triggerCondition = "$watchee.getCurrHour() == $watchee.getHome().getTimeToEat()",
+	@Watch(watcheeClassName = "neighbours.Office",
+			watcheeFieldNames = "opened",
+			query = "linked_to",
+			triggerCondition = "$watchee.isOpened() == false",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void goHome()
 	{
@@ -238,10 +272,27 @@ public class Human extends Agent{
 			moveBuilding2Building(office, home);
 		}
 	}
+	
+	public void goHomeFrom(Building b)
+	{
+		if (b != null && home != null)
+		{
+			moveBuilding2Building(b, home);
+		}
+	}
+	
 
-	public void triggerHungger() {
+
+	@Watch(watcheeClassName = "neighbours.Schedule",
+			watcheeFieldNames = "currHour",
+			triggerCondition = "$watcher.getHome() != null "
+			+ "&& $watchee.getCurrHour() == $watcher.getHome().getTimeToEat()",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void triggerHungger()
+	{
 		setHungry(true);
 	}
+
 	
 	private void moveBuilding2Building(Building start, Building stop)
 	{
@@ -263,43 +314,141 @@ public class Human extends Agent{
 	@Watch(watcheeClassName = "neighbours.House",
 			watcheeFieldNames = "food",
 			query = "linked_to",
-			triggerCondition = "$watchee.getFood() <= $watchee.getTesholdFood())",
+			triggerCondition = "$watchee.getFood() <= $watchee.getThresholdFood()"
+			                + " && $watchee.isShoppingScheduled() == false",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void scheduleShopping() {
-		if (!isCurrWorking)
+	public void scheduleShopping() 
+	{
+		int tick = MainContext.instance().getSchedule().getCurrentTick();
+		int tickPerHour = MainContext.instance().getSchedule().aHour;
+		
+		ScheduleParameters  params = ScheduleParameters.createRepeating(tick, tickPerHour);
+		ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
+		
+		scheduleShopping = scheduleSim.schedule(params, this, "tryShopping");
+		home.setShoppingScheduled(true);
+		System.out.println("Scheduling shop");
+	}
+	
+	@Watch(watcheeClassName = "neighbours.Human",
+			watcheeFieldNames = "boredom",
+			triggerCondition = "$watchee.getBoredom() > 10"
+			                + " && $watchee.equals($watcher)",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void scheduleMovie() 
+	{
+		if (!scheduledMovie)
 		{
-			Shop shop = findShop();
-			if(shop != null)
-				moveBuilding2Building(home, shop);
+		int tick = MainContext.instance().getSchedule().getCurrentTick();
+		int tickPerHour = MainContext.instance().getSchedule().aHour;
+		
+		ScheduleParameters  params = ScheduleParameters.createRepeating(tick, tickPerHour);
+		ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
+		
+		scheduleMovie = scheduleSim.schedule(params, this, "tryMovie");
+		scheduledMovie = true;
 		}
 	}
 	
-	@Watch(watcheeClassName = "neighbours.Shop",
-			watcheeFieldNames = "opened",
-			query = "within 0",
-			triggerCondition = "$watchee.getOpened() == true)",
-			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void shopping() {
-		System.out.println("Buy food");
+	public void removeSchedule(ISchedulableAction action)
+	{
+		ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
+		scheduleSim.removeAction(action);
+	}
+	
+	public void tryShopping()
+	{
+		if (!isCurrWorking && MainContext.instance().getShopZones() != null)
+		{
+			Service shop = null;
+			for (BuildingZone<? extends Service> zone : MainContext.instance().getShopZones())
+			{
+			    shop = findService(zone);
+			    if (shop != null)
+			    	break;
+			}
+			if(shop != null)
+			{
+				
+				int tick = MainContext.instance().getSchedule().getCurrentTick();
+				
+				ScheduleParameters  params = ScheduleParameters.createOneTime(tick + 2);
+				ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
+				scheduleSim.schedule(params, this, "removeSchedule", scheduleShopping);
+				
+				System.out.println("Going to shop");
+				goToService(shop);
+			}
+		}
+	}
+	
+	public void tryMovie()
+	{
+		if (!isCurrWorking && MainContext.instance().getMovie_zones() != null)
+		{
+			Service movie = null;
+			for (BuildingZone<? extends Service> zone : MainContext.instance().getMovie_zones())
+			{
+			    movie = findService(zone);
+			    if (movie != null)
+			    	break;
+			}
+			if(movie != null)
+			{
+				
+				int tick = MainContext.instance().getSchedule().getCurrentTick();
+				
+				ScheduleParameters  params = ScheduleParameters.createOneTime(tick + 2);
+				ISchedule scheduleSim = RunEnvironment.getInstance().getCurrentSchedule();
+				scheduleSim.schedule(params, this, "removeSchedule", scheduleMovie);
+				
+				goToService(movie);
+			}
+		}
+	}
+	
+	public Service findService(BuildingZone<? extends Service> zone) {
+		
+			for (Service s : zone.getBuildings())
+			{
+				if (s.isOpened() && !s.isFull())
+					return s;
+			}
+		
+		return null;
+	}
+	
+	private void goToService(Service s)
+	{
+		if (s != null && home != null)
+		{
+		  MainContext.instance().getNetworkBuilding().addEdge(this, s);
+		  moveBuilding2Building(home, s);
+		  s.increasedUsed();
+		}
+	}
+	
+	public void serviceDone(Service s)
+	{
+		RepastEdge<Agent> edge = MainContext.instance().getNetworkBuilding().getEdge(this, s);
+		if (edge != null)
+		   MainContext.instance().getNetworkBuilding().removeEdge(edge);
+		if (s instanceof Shop)
+			this.home.setShoppingScheduled(false);
+		else if (s instanceof MovieTheater)
+			scheduledMovie = false;
 	}
 	
 	private void death() {
+		for (RepastEdge<Agent> edge : MainContext.instance().getNetworkBuilding().getEdges(this))
+		   MainContext.instance().getNetworkBuilding().removeEdge(edge);
+		
 		MainContext.instance().getContext().remove(this);
+		this.home = null;
+		this.office = null;
+		
 	}
 	
-	@Watch(watcheeClassName = "neighbours.Office",
-			watcheeFieldNames = "opened",
-			query = "linked_to",
-			triggerCondition = "$watchee.isOpened() == false",
-			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void goHome()
-	{
-		
-		if (office != null && home != null)
-		{
-			moveBuilding2Building(office, home);
-		}
-	}
 	
 	private void planNextPath(GridPoint from, GridPoint dest, Class<? extends TransportType> transport) 
 			throws InstantiationException, IllegalAccessException
@@ -323,10 +472,21 @@ public class Human extends Agent{
 			watcheeFieldNames = "currMonth, currDay",
 			triggerCondition = "$watchee.getCurrDay() == $watcher.getBirth()[0] "
 							 + "&& $watchee.getCurrHour() == 1 "
-							 + "&& $watchee.getCurrMonth() == $watche.getBirth[1]",
+							 + "&& $watchee.getCurrMonth() == $watcher.getBirth()[1]",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	private void birthday() {
+	public void birthday() {
 		setAge(getAge() + 1);
+	}
+	
+	@Watch(watcheeClassName = "neighbours.Schedule",
+			watcheeFieldNames = "currDay",
+			triggerCondition = "$watcher.isHungry() == true",
+			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
+	public void starve() {
+		System.out.println("Starving !");
+		health -= 10;
+		if (health < 0)
+			animatedIcons.add(new DeathIconAgent(MainContext.instance().getGrid().getLocation(this)));
 	}
 
 	public int getAge() {
@@ -345,9 +505,7 @@ public class Human extends Agent{
 		return money;
 	}
 
-	public void setMoney(int money) {
-		this.money = money;
-	}
+
 
 	public boolean isHungry() {
 		return hungry;
@@ -361,9 +519,7 @@ public class Human extends Agent{
 		return home;
 	}
 
-	public void setHome(House home) {
-		this.home = home;
-	}
+
 
 	public int[] getBirth() {
 		return birth;

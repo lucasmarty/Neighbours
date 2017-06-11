@@ -6,8 +6,16 @@ import repast.simphony.engine.watcher.WatcherTriggerSchedule;
 public class MovieTheater extends Service {
 
 	
+	private int entertain;
 	
-	
+	public int getEntertain() {
+		return entertain;
+	}
+
+	public void setEntertain(int entertain) {
+		this.entertain = entertain;
+	}
+
 	@Override
 	public void compute() {
 		// TODO Auto-generated method stub
@@ -15,9 +23,12 @@ public class MovieTheater extends Service {
 	}
 
 	@Override
-	public void provideService(Human human) {
-		// TODO Auto-generated method stub
-		
+	protected void implementService(Human human) 
+	{
+
+			human.setMoney(human.getMoney() - cost);
+			int cur_bordedom = human.getBoredom();
+			human.setBoredom(Math.max(cur_bordedom - entertain, 0));
 	}
 
 	
