@@ -30,6 +30,8 @@ public abstract class Service extends Building {
 		{
 		   implementService(human);
 		}
+		else
+			System.out.println("Not enough money !");
 		
 		human.serviceDone(this);
 		human.goHomeFrom(this);
@@ -38,11 +40,10 @@ public abstract class Service extends Building {
 	
 	@Watch(watcheeClassName = "neighbours.Human",
 			watcheeFieldNames = "moving",
-			query = "linked_from and within_vn 0",
+			query = "linked_from",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void triggerService()
 	{
-		System.out.println("Trying to trigger service");
 		GridPoint pt = MainContext.instance().getGrid().getLocation(this);
 		for (Agent a : MainContext.instance().getGrid().getObjectsAt(pt.getX(), pt.getY()))
 		{

@@ -87,9 +87,9 @@ public class MainContext {
 			for (Shop s : shop.getBuildings())
 			{
 				s.setFoodPerService(RandomHelper.nextIntFromTo(5, 15));
-				s.setCost(RandomHelper.nextIntFromTo(150, 500));
+				s.setCost(RandomHelper.nextIntFromTo(100, 300));
 				s.setTimePerService(1);
-				s.setClosure(RandomHelper.nextIntFromTo(17, 23));
+				s.setClosure(RandomHelper.nextIntFromTo(17, 24));
 				s.setOpening(RandomHelper.nextIntFromTo(s.getClosure() - 10, s.getClosure() - 7));
 			}
 		}

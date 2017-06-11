@@ -4,7 +4,7 @@
   <styles>
     <entry>
       <string>neighbours.Shop</string>
-      <string>repast.simphony.visualizationOGL2D.DefaultStyleOGL2D</string>
+      <string>repast.simphony.visualization.editedStyle.EditedStyle2D</string>
     </entry>
     <entry>
       <string>neighbours.Office</string>
@@ -26,7 +26,7 @@
   <editedStyles>
     <entry>
       <string>neighbours.Shop</string>
-      <null/>
+      <string>neighbours.Shop.style_4.xml</string>
     </entry>
     <entry>
       <string>neighbours.Office</string>
@@ -65,7 +65,7 @@
     <pType>LAST</pType>
     <duration>-1.0</duration>
     <frequency>REPEAT</frequency>
-    <hashCode>793949428</hashCode>
+    <hashCode>1184587757</hashCode>
   </schedParams>
   <layoutClassName>repast.simphony.visualization.visualization2D.Random2DLayout</layoutClassName>
   <layoutProjection>building network</layoutProjection>

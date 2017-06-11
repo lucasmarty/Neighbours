@@ -25,9 +25,9 @@ public class Human extends Agent{
 	private int age;
 	private int[] birth;
 	private int money;
-	private boolean paid = false;
 	private boolean hungry;
 	private boolean moving;
+	private int initHealth;
 	private boolean isCurrWorking = false;
 	private int health;
 	private int boredom = 0;
@@ -101,10 +101,6 @@ public class Human extends Agent{
 	public Office getOffice() {
 		return office;
 	}
-
-	public void setLastPaid(boolean paid) {
-		this.paid = paid;
-	}
 		
 
 	public Human(int age, int[] birth, int money, int health)
@@ -113,7 +109,8 @@ public class Human extends Agent{
 		this.setBirth(birth);
 		this.money = money;
 		this.health = health;
-		this.setHungry(false);
+		initHealth = health;
+		hungry = false;
 		this.setCurrWorking(false);
 		moving = false;
 		traj_queue = new LinkedList<>();
@@ -217,34 +214,23 @@ public class Human extends Agent{
 	
 
 	
-	public boolean getLastPaid()
-	{
-		return paid;
-	}
 	
 	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currDay",
+			watcheeFieldNames = "currDay, currHour",
 			triggerCondition = "$watchee.getCurrDay() == 1 "
-							 + "&& $watchee.getCurrHour() == 1 "
-					         + "&& $watcher.getLastPaid() == false",
+							 + "&& $watchee.getCurrHour() == 1",
 			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
 	public void getPaid() 
 	{
 		
-		if (office != null && !getLastPaid())
+		if (office != null)
+		{
+			System.out.println("got " + office.getSalary() + " as salary");
 		    setMoney(getMoney() + office.getSalary());
+		}
 		
-		setLastPaid(true);
 	}
 	
-	@Watch(watcheeClassName = "neighbours.Schedule",
-			watcheeFieldNames = "currDay",
-			triggerCondition = "$watchee.getCurrDay() == 2 ",
-			whenToTrigger = WatcherTriggerSchedule.IMMEDIATE)
-	public void resetLastPaid()
-	{
-		setLastPaid(false);
-	}
 
 	@Watch(watcheeClassName = "neighbours.Office",
 			watcheeFieldNames = "opened",
@@ -411,7 +397,10 @@ public class Human extends Agent{
 		
 			for (Service s : zone.getBuildings())
 			{
-				if (s.isOpened() && !s.isFull())
+				int timePlusService = MainContext.instance().getSchedule().getCurrHour() + s.getTimePerService();
+				if (s.isOpened() && !s.isFull() 
+						&& timePlusService < s.getClosure()
+						&& money >= s.getCost())
 					return s;
 			}
 		
@@ -513,6 +502,8 @@ public class Human extends Agent{
 
 	public void setHungry(boolean hungry) {
 		this.hungry = hungry;
+		if (hungry == false && health < initHealth)
+			health += 10;
 	}
 
 	public House getHome() {
